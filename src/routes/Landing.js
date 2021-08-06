@@ -156,9 +156,6 @@ const StyledLanding = styled(Landing)`
     background-repeat: no-repeat;
     background-position: center bottom;
 
-    svg {
-      vertical-align: -0.125em;
-    }
     .container {
       display: flex;
       justify-content: center;

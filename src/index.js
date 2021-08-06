@@ -2,15 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
+import { createGlobalStyle } from 'styled-components';
 import Router from './Router';
 import store from './store';
 import reportWebVitals from './reportWebVitals';
+
+const GlobalStyle = createGlobalStyle`
+  svg {
+    vertical-align: -0.25em;
+  }
+`;
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router />
     </Provider>
+    <GlobalStyle />
     {/* globally enable react tooltips */}
     <ReactTooltip />
   </React.StrictMode>,

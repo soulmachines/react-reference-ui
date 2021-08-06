@@ -237,9 +237,6 @@ const StyledLoading = styled(Loading)`
       font-size: 2rem;
     }
   }
-  svg {
-    vertical-align: -0.125em;
-  }
 `;
 
 const mapStateToProps = ({ sm }) => ({

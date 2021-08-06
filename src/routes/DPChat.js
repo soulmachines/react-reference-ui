@@ -15,7 +15,7 @@ import { transparentHeader, headerHeight } from '../config';
 import CameraPreview from '../components/CameraPreview';
 
 const DPChat = ({
-  className, connected, loading, dispatchCreateScene, dispatchDisconnect, error, tosAccepted,
+  className, connected, loading, dispatchCreateScene, dispatchDisconnect, error, tosAccepted, cameraOn,
 }) => {
   useEffect(() => {
     if (!connected) dispatchCreateScene();
@@ -60,11 +60,17 @@ const DPChat = ({
             <div className="col">
               <Controls />
             </div>
-            <div className="col-auto">
-              <div className="camera-preview-zeroheight-wrapper">
-                <CameraPreview />
-              </div>
-            </div>
+            {
+              cameraOn
+                ? (
+                  <div className="col-auto">
+                    <div className="camera-preview-zeroheight-wrapper">
+                      <CameraPreview />
+                    </div>
+                  </div>
+                )
+                : <div />
+            }
           </div>
         </div>
       </div>
@@ -138,6 +144,7 @@ const mapStateToProps = ({ sm }) => ({
   loading: sm.loading,
   error: sm.error,
   tosAccepted: sm.tosAccepted,
+  cameraOn: sm.cameraOn,
 });
 
 const mapDispatchToProps = (dispatch) => ({

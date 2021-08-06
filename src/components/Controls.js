@@ -31,7 +31,7 @@ const Controls = ({
   const [inputFocused, setInputFocused] = useState(false);
   const [volume, setVolume] = useState(0);
   const [hideInputDisplay, setHideInputDisplay] = useState(true);
-  const [showTextInput, setShowTextInput] = useState(false);
+  const [showTextInput, setShowTextInput] = useState(isMuted);
 
   const handleInput = (e) => setInputValue(e.target.value);
   const handleFocus = () => {
@@ -130,6 +130,26 @@ const Controls = ({
 
   // clear placeholder text on reconnect, sometimes the state updates won't propagate
   const placeholder = intermediateUserUtterance === '' ? '' : intermediateUserUtterance;
+
+  const transcriptButton = (
+    <button
+      type="button"
+      className={`btn btn-${showTranscript ? '' : 'outline-'}secondary`}
+      aria-label="Toggle Transcript"
+      data-tip="Toggle Transcript"
+      onClick={dispatchToggleShowTranscript}
+      disabled={transcript.length === 0}
+    >
+      <ChatSquareDotsFill />
+    </button>
+  );
+
+  const interruptButton = (
+    <button type="button" className="btn btn-outline-secondary" disabled={speechState !== 'speaking'} onClick={dispatchStopSpeaking} data-tip="Stop Speaking">
+      <XOctagonFill size={21} />
+    </button>
+  );
+
   return (
     <div className={className}>
       <div className="row">
@@ -156,12 +176,18 @@ const Controls = ({
           </span>
         </div>
       </div>
+      <div className="row">
+        <div className={`d-${showTextInput ? 'flex' : 'none'} d-md-none justify-content-between pb-2`}>
+          { transcriptButton }
+          {interruptButton}
+        </div>
+      </div>
       <div className="row mb-3 display-flex justify-content-center">
-        <div className="col-auto">
-          <button type="button" className={`btn btn-${showTranscript ? '' : 'outline-'}secondary`} aria-label="Toggle Transcript" data-tip="Toggle Transcript" onClick={dispatchToggleShowTranscript} disabled={transcript.length === 0}><ChatSquareDotsFill /></button>
+        <div className={`col-auto d-md-block d-${showTextInput ? 'none' : 'block'}`}>
+          { transcriptButton }
         </div>
         <div className="col d-flex justify-content-center">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="col">
             <div className="input-group">
               <button type="button" className={`speaking-status btn btn-${isMuted ? 'outline-secondary' : 'secondary '}`} onClick={toggleKeyboardInput} data-tip="Toggle Microphone Input">
                 <div>
@@ -204,10 +230,9 @@ const Controls = ({
             </div>
           </form>
         </div>
-        <div className="col-auto">
-          <button type="button" className="btn btn-outline-secondary" disabled={speechState !== 'speaking'} onClick={dispatchStopSpeaking} data-tip="Stop Speaking">
-            <XOctagonFill size={21} />
-          </button>
+        <div className={`col-auto d-md-block d-${showTextInput ? 'none' : 'block'}`}>
+          {' '}
+          { interruptButton }
         </div>
       </div>
     </div>
@@ -233,7 +258,6 @@ const StyledControls = styled(Controls)`
   display: ${(props) => (props.connected ? '' : 'none')};
 
   .form-control {
-    min-width: 20rem;
     opacity: 0.8;
     &:focus {
       opacity: 1;

@@ -47,9 +47,4 @@ export default styled(Link)`
     width: auto;
     height: auto;
   }
-
-  svg {
-    margin-top: -0.2rem;
-    margin-left: 0.4rem;
-  }
 `;
