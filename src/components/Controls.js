@@ -176,7 +176,7 @@ const Controls = ({
   return (
     <div className={className}>
       <div className="row">
-        <div className={`${showTextInput ? 'justify-content-md-start' : 'd-flex'} col-md-10 offset-md-1 d-md-flex justify-content-center mb-2`}>
+        <div className={`${showTextInput ? 'justify-content-md-start' : ''} col-md-10 offset-md-1 d-flex justify-content-center mb-2`}>
           { feedbackDisplay }
         </div>
       </div>
