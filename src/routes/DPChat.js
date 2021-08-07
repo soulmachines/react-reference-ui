@@ -15,7 +15,14 @@ import { transparentHeader, headerHeight } from '../config';
 import CameraPreview from '../components/CameraPreview';
 
 const DPChat = ({
-  className, connected, loading, dispatchCreateScene, dispatchDisconnect, error, tosAccepted, cameraOn,
+  className,
+  connected,
+  loading,
+  dispatchCreateScene,
+  dispatchDisconnect,
+  error,
+  tosAccepted,
+  cameraOn,
 }) => {
   useEffect(() => {
     if (!connected) dispatchCreateScene();
@@ -92,6 +99,7 @@ DPChat.propTypes = {
     err: PropTypes.objectOf(PropTypes.string),
   }),
   tosAccepted: PropTypes.bool.isRequired,
+  cameraOn: PropTypes.bool.isRequired,
 };
 
 DPChat.defaultProps = {
