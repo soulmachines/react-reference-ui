@@ -176,14 +176,13 @@ const Controls = ({
   return (
     <div className={className}>
       <div className="row">
-        <div className={`${showTextInput ? 'd-none justify-content-md-start' : 'd-flex'} col-md-10 offset-md-1 d-md-flex justify-content-center mb-2`}>
+        <div className={`${showTextInput ? 'justify-content-md-start' : 'd-flex'} col-md-10 offset-md-1 d-md-flex justify-content-center mb-2`}>
           { feedbackDisplay }
         </div>
       </div>
       <div className="row">
         <div className={`d-${showTextInput ? 'flex' : 'none'} d-md-none justify-content-between align-items-end pb-2`}>
           <div>{ transcriptButton }</div>
-          { feedbackDisplay }
           <div>{ interruptButton }</div>
         </div>
       </div>
