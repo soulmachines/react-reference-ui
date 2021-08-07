@@ -150,20 +150,17 @@ const Controls = ({
     </button>
   );
 
-  return (
-    <div className={className}>
-      <div className="row">
-        <div className="col-10 offset-1 d-flex justify-content-center mb-2">
-          <span
-            className={`badge bg-light align-items-center input-display
+  const feedbackDisplay = (
+    <span
+      className={`badge bg-light input-display
               ${userSpeaking ? 'utterance-processing' : ''}
               ${(transcript.length === 0 && intermediateUserUtterance === '') || hideInputDisplay ? 'hide-input' : 'show-input'}
               `}
-          >
-            <div className="text-wrap text-start">
-              { userSpeaking ? 'Listening: ' : 'I heard: '}
-              {placeholder || lastUserUtterance}
-              {
+    >
+      <div className="text-wrap text-start">
+        { userSpeaking ? 'Listening: ' : 'I heard: '}
+        {placeholder || lastUserUtterance}
+        {
                 userSpeaking
                   ? (
                     <div className="spinner-border spinner-border-sm ms-1" role="status">
@@ -172,45 +169,52 @@ const Controls = ({
                   )
                   : null
               }
-            </div>
-          </span>
+      </div>
+    </span>
+  );
+
+  return (
+    <div className={className}>
+      <div className="row">
+        <div className={`${showTextInput ? 'd-none justify-content-md-start' : 'd-flex'} col-md-10 offset-md-1 d-md-flex justify-content-center mb-2`}>
+          { feedbackDisplay }
         </div>
       </div>
       <div className="row">
-        <div className={`d-${showTextInput ? 'flex' : 'none'} d-md-none justify-content-between pb-2`}>
-          { transcriptButton }
-          {interruptButton}
+        <div className={`d-${showTextInput ? 'flex' : 'none'} d-md-none justify-content-between align-items-end pb-2`}>
+          <div>{ transcriptButton }</div>
+          { feedbackDisplay }
+          <div>{ interruptButton }</div>
         </div>
       </div>
       <div className="row mb-3 display-flex justify-content-center">
         <div className={`col-auto d-md-block d-${showTextInput ? 'none' : 'block'}`}>
           { transcriptButton }
         </div>
-        <div className="col d-flex justify-content-center">
-          <form onSubmit={handleSubmit} className="col">
-            <div className="input-group">
-              <button type="button" className={`speaking-status btn btn-${isMuted ? 'outline-secondary' : 'secondary '}`} onClick={toggleKeyboardInput} data-tip="Toggle Microphone Input">
-                <div>
-                  { isMuted ? <MicMuteFill size={21} />
-                    : (
-                      <div className="volume-display">
-                        {/* compute height as fraction of 127 so fill corresponds to volume */}
-                        <div style={{ height: `${volumeMeterHeight}px` }} className="meter-component meter-component-1" />
-                        <div style={{ height: `${(volume / 127) * volumeMeterHeight}px` }} className="meter-component meter-component-2" />
-                      </div>
-                    ) }
-                </div>
-              </button>
-              <button
-                type="button"
-                className={`btn btn-${showTextInput ? 'secondary' : 'outline-secondary'}`}
-                aria-label="Toggle Keyboard Input"
-                data-tip="Toggle Keyboard Input"
-                onClick={toggleKeyboardInput}
-              >
-                <Keyboard size={21} />
-              </button>
-              {
+        <form onSubmit={handleSubmit} className="col ">
+          <div className="input-group d-flex justify-content-center">
+            <button type="button" className={`speaking-status btn btn-${isMuted ? 'outline-secondary' : 'secondary '}`} onClick={toggleKeyboardInput} data-tip="Toggle Microphone Input">
+              <div>
+                { isMuted ? <MicMuteFill size={21} />
+                  : (
+                    <div className="volume-display">
+                      {/* compute height as fraction of 127 so fill corresponds to volume */}
+                      <div style={{ height: `${volumeMeterHeight}px` }} className="meter-component meter-component-1" />
+                      <div style={{ height: `${(volume / 127) * volumeMeterHeight}px` }} className="meter-component meter-component-2" />
+                    </div>
+                  ) }
+              </div>
+            </button>
+            <button
+              type="button"
+              className={`btn btn-${showTextInput ? 'secondary' : 'outline-secondary'}`}
+              aria-label="Toggle Keyboard Input"
+              data-tip="Toggle Keyboard Input"
+              onClick={toggleKeyboardInput}
+            >
+              <Keyboard size={21} />
+            </button>
+            {
                 showTextInput
                   ? (
                     <input
@@ -227,9 +231,8 @@ const Controls = ({
                   : null
               }
 
-            </div>
-          </form>
-        </div>
+          </div>
+        </form>
         <div className={`col-auto d-md-block d-${showTextInput ? 'none' : 'block'}`}>
           {' '}
           { interruptButton }
