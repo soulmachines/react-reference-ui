@@ -396,7 +396,7 @@ export const createScene = createAsyncThunk('sm/createScene', async (audioOnly =
 // usually used for typed input or UI elems that trigger a certain phrase
 export const sendTextMessage = createAsyncThunk('sm/sendTextMessage', async ({ text }, thunk) => {
   if (scene && persona) {
-    if (ORCHESTRATION_MODE) scene.sendUserText(text);
+    if (ORCHESTRATION_MODE === true) scene.sendUserText(text);
     else persona.conversationSend(text);
     thunk.dispatch(actions.addConversationResult({
       source: 'user',
