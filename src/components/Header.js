@@ -45,7 +45,7 @@ const StyledHeader = styled(Header)`
   height: ${headerHeight};
   width: 100%;
   padding-left: 2rem;
-  padding-right: 2rem;
+  padding-right: 0.75rem;
 
   position: ${transparentHeader ? 'absolute' : 'relative'};
   z-index: 100;
