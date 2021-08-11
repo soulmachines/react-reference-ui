@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
-import { BoxArrowRight } from 'react-bootstrap-icons';
 import {
   logo, logoAltText, transparentHeader, headerHeight, logoLink,
 } from '../config';
@@ -29,7 +28,7 @@ const Header = ({
       <div>
         {/* right align */}
         <button type="button" disabled={!connected} className={`btn btn-outline-danger ${connected && !loading && pathname === '/video' ? '' : 'd-none'}`} onClick={dispatchDisconnect} data-tip="Disconnect" data-place="bottom">
-          <BoxArrowRight size={24} />
+          Exit
         </button>
       </div>
     </div>
