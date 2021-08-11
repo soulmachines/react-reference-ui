@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -18,9 +18,20 @@ const ContentCardDisplay = ({
     </div>
   ));
 
-  if (activeCards.length > 0 || showTranscript === true && videoWidth > breakpoints.md) {
-    dispatchAnimateCamera(calculateCameraPosition(videoWidth, videoHeight, 0.7));
-  } else dispatchAnimateCamera(calculateCameraPosition(videoWidth, videoHeight, 0.5));
+  const animateCameraToFitCards = () => {
+    if ((activeCards.length > 0 || showTranscript === true) && videoWidth >= breakpoints.md) {
+      dispatchAnimateCamera(calculateCameraPosition(videoWidth, videoHeight, 0.7));
+    } else dispatchAnimateCamera(calculateCameraPosition(videoWidth, videoHeight, 0.5));
+  };
+
+  useEffect(() => {
+    animateCameraToFitCards();
+  }, [showTranscript, activeCards]);
+
+  useEffect(() => {
+    window.addEventListener('resize', animateCameraToFitCards);
+    return () => window.removeEventListener('resize', animateCameraToFitCards);
+  });
 
   return (
     <div className={className}>
@@ -40,9 +51,17 @@ ContentCardDisplay.propTypes = {
 
 const StyledContentCardDisplay = styled(ContentCardDisplay)`
   max-height: 10rem;
-  overflow-y: hidden;
+  overflow-y: scroll;
+
+  /* show translucent background if card showing on small device */
+  ${({ activeCards, showTranscript }) => (activeCards.length > 0 || showTranscript === true
+    ? `background: rgba(255, 255, 255, 0.3);
+    outline: 0.5rem solid rgba(255, 255, 255, 0.3);`
+    : '')}
+
   @media(min-width: ${breakpoints.md}px) {
     max-height: 100%;
+    background: none;
   }
   width: 100%;
 `;
