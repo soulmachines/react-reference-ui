@@ -366,7 +366,10 @@ export const createScene = createAsyncThunk('sm/createScene', async (audioOnly =
 
     // set video dimensions
     const { videoWidth, videoHeight } = thunk.getState().sm;
-    scene.sendVideoBounds(videoWidth, videoHeight);
+    // calc resolution w/ device pixel ratio
+    const deviceWidth = Math.round(videoWidth * window.devicePixelRatio);
+    const deviceHeight = Math.round(videoHeight * window.devicePixelRatio);
+    scene.sendVideoBounds(deviceWidth, deviceHeight);
 
     // create proxy of webcam video feed if user has granted us permission
 
@@ -506,7 +509,10 @@ const smSlice = createSlice({
     setVideoDimensions: (state, { payload }) => {
       const { videoWidth, videoHeight } = payload;
       // update video dimensions in persona
-      scene.sendVideoBounds(videoWidth, videoHeight);
+      // calc resolution w/ device pixel ratio
+      const deviceWidth = Math.round(videoWidth * window.devicePixelRatio);
+      const deviceHeight = Math.round(videoHeight * window.devicePixelRatio);
+      scene.sendVideoBounds(deviceWidth, deviceHeight);
       return { ...state, videoWidth, videoHeight };
     },
     disconnect: (state) => {
