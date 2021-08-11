@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import reactDom from 'react-dom';
 import PersonaVideo from '../components/PersonaVideo';
 import Captions from '../components/Captions';
 import Controls from '../components/Controls';
@@ -25,23 +26,45 @@ const DPChat = ({
   cameraOn,
 }) => {
   useEffect(() => {
-    if (!connected) dispatchCreateScene();
-    // cleanup function, disconnects on component dismount
-    return () => dispatchDisconnect();
+  //   if (!connected) dispatchCreateScene();
+  //   // cleanup function, disconnects on component dismount
+  //   return () => dispatchDisconnect();
   }, []);
+
+  const overlayRef = createRef();
+  const [height, setHeight] = useState('100vh');
+  useEffect(() => {
+    if (overlayRef.current) {
+      setHeight(window.innerHeight);
+    }
+  }, [overlayRef]);
 
   const history = useHistory();
   useEffect(() => {
     if (error !== null) history.push('/loading?error=true');
   }, [error]);
-  // if TOS hasn't been accepted, send to /
-  if (tosAccepted === false) history.push('/');
+  // // if TOS hasn't been accepted, send to /
+  // if (tosAccepted === false) history.push('/');
 
   return (
     <div className={className}>
       <Header />
-      <div className="video-overlay">
+      <div className="video-overlay" ref={overlayRef} style={{ height }}>
+        {/* top tow */}
         <div className="container d-flex flex-column">
+          {
+              cameraOn
+                ? (
+                  <div className="row d-flex justify-content-end">
+                    <div className="col-auto">
+                      <div className="camera-preview-zeroheight-wrapper">
+                        <CameraPreview />
+                      </div>
+                    </div>
+                  </div>
+                )
+                : <div />
+            }
           {/* middle row */}
           <div className={loading || connected === false ? 'loading-container' : 'vertical-fit-container col-5'}>
             {
@@ -59,25 +82,16 @@ const DPChat = ({
           </div>
           {/* bottom row */}
           <div className="row">
-            <div className="col text-center">
-              <Captions />
+            <div className="row">
+              <div className="col text-center">
+                <Captions />
+              </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col">
-              <Controls />
+            <div className="row">
+              <div className="col">
+                <Controls />
+              </div>
             </div>
-            {
-              cameraOn
-                ? (
-                  <div className="col-auto">
-                    <div className="camera-preview-zeroheight-wrapper">
-                      <CameraPreview />
-                    </div>
-                  </div>
-                )
-                : <div />
-            }
           </div>
         </div>
       </div>
@@ -115,12 +129,10 @@ const StyledDPChat = styled(DPChat)`
     z-index: 10;
 
     width: 100%;
-    height: ${transparentHeader ? '100vh' : `calc(100vh - ${headerHeight})`};
     ${transparentHeader ? 'padding' : 'margin'}-top: ${headerHeight};
-    /* overflow: hidden; */
 
     .container {
-      height: calc(100vh - ${headerHeight});
+      height: 100%;
     }
 
     .vertical-fit-container {
@@ -140,9 +152,9 @@ const StyledDPChat = styled(DPChat)`
     }
 
     .camera-preview-zeroheight-wrapper {
-      position: absolute;
+      /* position: absolute;
       bottom: .5rem;
-      right: 1rem;
+      right: 1rem; */
     }
   }
 `;

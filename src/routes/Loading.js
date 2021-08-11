@@ -28,7 +28,7 @@ const Loading = ({
   const history = useHistory();
 
   // if TOS hasn't been accepted, send to /
-  if (tosAccepted === false) history.push('/');
+  // if (tosAccepted === false) history.push('/');
 
   const [displayedPage, setDisplayedPage] = useState(0);
   const pages = [

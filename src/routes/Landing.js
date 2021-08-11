@@ -148,7 +148,7 @@ Landing.propTypes = {
 const StyledLanding = styled(Landing)`
   .landing-wrapper {
     padding-top: ${headerHeight};
-    min-height: calc(100vh - ${headerHeight});
+    min-height: calc(100vh - ${headerHeight} );
 
     background-image: url(${landingBackground});
     background-color: rgb(247, 232, 219);
