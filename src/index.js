@@ -9,7 +9,7 @@ import reportWebVitals from './reportWebVitals';
 
 const GlobalStyle = createGlobalStyle`
   svg {
-    vertical-align: -0.25em;
+    vertical-align: -0.125em;
   }
 `;
 
