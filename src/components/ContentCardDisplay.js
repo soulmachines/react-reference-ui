@@ -6,6 +6,7 @@ import { setActiveCards, animateCamera } from '../store/sm/index';
 import { calculateCameraPosition } from '../utils/camera';
 import Transcript from './ContentCards/Transcript';
 import ContentCardSwitch from './ContentCardSwitch';
+import breakpoints from '../utils/breakpoints';
 
 const ContentCardDisplay = ({
   activeCards, dispatchAnimateCamera, videoWidth, videoHeight, showTranscript, className,
@@ -17,7 +18,7 @@ const ContentCardDisplay = ({
     </div>
   ));
 
-  if (activeCards.length > 0 || showTranscript === true) {
+  if (activeCards.length > 0 || showTranscript === true && videoWidth > breakpoints.md) {
     dispatchAnimateCamera(calculateCameraPosition(videoWidth, videoHeight, 0.7));
   } else dispatchAnimateCamera(calculateCameraPosition(videoWidth, videoHeight, 0.5));
 
@@ -38,7 +39,11 @@ ContentCardDisplay.propTypes = {
 };
 
 const StyledContentCardDisplay = styled(ContentCardDisplay)`
-  max-height: 100%;
+  max-height: 10rem;
+  overflow-y: hidden;
+  @media(min-width: ${breakpoints.md}px) {
+    max-height: 100%;
+  }
   width: 100%;
 `;
 

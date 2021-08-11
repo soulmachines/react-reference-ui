@@ -14,6 +14,7 @@ import {
 import Header from '../components/Header';
 import { transparentHeader, headerHeight } from '../config';
 import CameraPreview from '../components/CameraPreview';
+import breakpoints from '../utils/breakpoints';
 
 const DPChat = ({
   className,
@@ -68,7 +69,7 @@ const DPChat = ({
                 : <div />
             }
           {/* middle row */}
-          <div className={loading || connected === false ? 'loading-container' : 'vertical-fit-container col-5'}>
+          <div className="vertical-fit-container col-md-5">
             {
             loading && connected === false
               ? (
@@ -80,10 +81,17 @@ const DPChat = ({
               // connect button
               : <button type="button" className={`btn btn-outline-success ${!connected && !loading ? '' : 'd-none'}`} onClick={dispatchCreateScene} data-tip="Connect">Connect</button>
             }
-            { connected ? <ContentCardDisplay /> : null}
+            <div className="d-md-block d-none">
+              <ContentCardDisplay />
+            </div>
           </div>
           {/* bottom row */}
-          <div className="row">
+          <div>
+            <div className="row">
+              <div className="d-block d-md-none">
+                <ContentCardDisplay />
+              </div>
+            </div>
             <div className="row">
               <div className="col text-center">
                 <Captions />
@@ -141,11 +149,14 @@ const StyledDPChat = styled(DPChat)`
       flex: 1 1 auto;
       overflow-y: scroll;
 
-      display: flex;
-      align-items: center;
       scrollbar-width: none; /* Firefox 64 */
       &::-webkit-scrollbar {
         display: none;
+      }
+
+      @media (min-width: ${breakpoints.md}px) {
+        display: flex;
+        align-items: center;
       }
     }
     .loading-container {
