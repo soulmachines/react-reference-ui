@@ -1,10 +1,10 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import {
-  ArrowRightCircleFill, CameraVideo, CameraVideoFill, LightningCharge, MicFill, Soundwave,
+  ArrowRightCircleFill, CameraVideoFill, MicFill,
 } from 'react-bootstrap-icons';
 import { createScene } from '../store/sm';
 import Header from '../components/Header';
@@ -32,22 +32,26 @@ const Loading = ({
 
   const [displayedPage, setDisplayedPage] = useState(0);
   const pages = [
-    <div className="card">
-      <div className="card-body">
+    <div>
+      <div className="m-1">
         <h1>
-          Before we get face to face,
+          Before we get started,
         </h1>
-        <h4>there are some things we should go over.</h4>
-        <p>For me to work best, I need to be able to see you and hear your voice.</p>
-        <p>This will be just like a video call where we can talk face to face.</p>
-        <p>
-          <b>
-            If that sounds okay, please turn on access to your microphone and
-            camera when we request it.
-          </b>
-        </p>
-        <div className="d-grid gap-2">
-          <button type="button" onClick={() => setDisplayedPage(displayedPage + 1)} className="btn btn-primary">Next</button>
+        <h5>there are some things we should go over.</h5>
+      </div>
+      <div className="card">
+        <div className="card-body">
+          <p>For me to work best, I need to be able to see you and hear your voice.</p>
+          <p>This will be just like a video call where we can talk face to face.</p>
+          <p>
+            <b>
+              If that sounds okay, please turn on access to your microphone and
+              camera when we request it.
+            </b>
+          </p>
+          <div className="d-grid gap-2">
+            <button type="button" onClick={() => setDisplayedPage(displayedPage + 1)} className="btn btn-primary">Next</button>
+          </div>
         </div>
       </div>
     </div>,
@@ -76,7 +80,7 @@ const Loading = ({
     <div className="card">
       <div className="card-body">
 
-        <h4>Finally, please find a quiet environment.</h4>
+        <h5>Finally, please find a quiet environment.</h5>
         <p>
           I can find it hard to hear you when you&apos;re in a noisy room or
           there is a lot of noise in the background.
