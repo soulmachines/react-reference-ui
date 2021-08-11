@@ -117,7 +117,7 @@ const Loading = ({
         {
           !error
             ? (
-              <div>
+              <div className="col-md-6 offset-md-3">
                 {pages[displayedPage]}
               </div>
             )
