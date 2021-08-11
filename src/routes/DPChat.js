@@ -25,19 +25,21 @@ const DPChat = ({
   tosAccepted,
   cameraOn,
 }) => {
+  const overlayRef = createRef();
+  const [height, setHeight] = useState('100vh');
+
+  const handleResize = () => {
+    setHeight(window.innerHeight);
+  };
+
   useEffect(() => {
   //   if (!connected) dispatchCreateScene();
   //   // cleanup function, disconnects on component dismount
   //   return () => dispatchDisconnect();
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const overlayRef = createRef();
-  const [height, setHeight] = useState('100vh');
-  useEffect(() => {
-    if (overlayRef.current) {
-      setHeight(window.innerHeight);
-    }
-  }, [overlayRef]);
 
   const history = useHistory();
   useEffect(() => {

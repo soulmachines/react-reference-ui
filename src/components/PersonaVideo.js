@@ -16,13 +16,8 @@ const PersonaVideo = ({
   const containerRef = createRef();
   // only set the video ref once, otherwise we get a flickering whenever the window is resized
   const [videoDisplayed, setVideoDisplayed] = useState(false);
-
+  // we need to keep track of the inner window height so the video displays correctly
   const [height, setHeight] = useState('100vh');
-  useEffect(() => {
-    if (containerRef.current) {
-      setHeight(window.innerHeight);
-    }
-  }, [containerRef]);
 
   const handleResize = () => {
     if (containerRef.current) {
@@ -32,6 +27,8 @@ const PersonaVideo = ({
       const videoWidth = containerRef.current.clientWidth;
       const videoHeight = containerRef.current.clientHeight;
       setVideoDimensions(videoWidth, videoHeight);
+      // constrain to inner window height so it fits on mobile
+      setHeight(window.innerHeight);
     }
   };
 
