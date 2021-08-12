@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import reactDom from 'react-dom';
 import PersonaVideo from '../components/PersonaVideo';
 import Captions from '../components/Captions';
 import Controls from '../components/Controls';
@@ -34,20 +33,22 @@ const DPChat = ({
   };
 
   useEffect(() => {
-  //   if (!connected) dispatchCreateScene();
-  //   // cleanup function, disconnects on component dismount
-  //   return () => dispatchDisconnect();
+    if (!connected) dispatchCreateScene();
     handleResize();
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    // cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      dispatchDisconnect();
+    };
   }, []);
 
   const history = useHistory();
   useEffect(() => {
     if (error !== null) history.push('/loading?error=true');
   }, [error]);
-  // // if TOS hasn't been accepted, send to /
-  // if (tosAccepted === false) history.push('/');
+  // if TOS hasn't been accepted, send to /
+  if (tosAccepted === false) history.push('/');
 
   return (
     <div className={className}>
