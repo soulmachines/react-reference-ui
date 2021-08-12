@@ -62,6 +62,7 @@ const StyledContentCardDisplay = styled(ContentCardDisplay)`
   @media(min-width: ${breakpoints.md}px) {
     max-height: 100%;
     background: none;
+    outline: none;
   }
   width: 100%;
 `;
