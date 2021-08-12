@@ -18,19 +18,20 @@ const Loading = ({
   const useQuery = () => new URLSearchParams(useLocation().search);
   const query = useQuery();
 
-  // create persona scene on mount if needed
-  useEffect(() => {
+  const [displayedPage, setDisplayedPage] = useState(0);
+  // create persona scene when user presses button
+  const createSceneAndIteratePage = () => {
     // if we encounter a fatal error, app redirects to /loading to display
     if (!connected && !loading && query.get('error') !== true) dispatchCreateScene();
-  }, []);
+    setDisplayedPage(displayedPage + 1);
+  };
 
   // use to reload page if user unblocks perms and presses "try again"
   const history = useHistory();
 
   // if TOS hasn't been accepted, send to /
-  // if (tosAccepted === false) history.push('/');
+  if (tosAccepted === false) history.push('/');
 
-  const [displayedPage, setDisplayedPage] = useState(0);
   const pages = [
     <div>
       <div className="m-1">
@@ -50,7 +51,7 @@ const Loading = ({
             </b>
           </p>
           <div className="d-grid gap-2">
-            <button type="button" onClick={() => setDisplayedPage(displayedPage + 1)} className="btn btn-primary">Next</button>
+            <button type="button" onClick={createSceneAndIteratePage} className="btn btn-primary">Next</button>
           </div>
         </div>
       </div>
