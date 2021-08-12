@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link, useHistory, useLocation } from 'react-router-dom';
@@ -134,8 +134,22 @@ const Loading = ({
     },
   };
 
+  const overlayRef = createRef();
+  const [height, setHeight] = useState('100vh');
+
+  const handleResize = () => {
+    setHeight(window.innerHeight);
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    // cleanup
+    return () => { window.removeEventListener('resize', handleResize); };
+  }, []);
+
   return (
-    <div className={className}>
+    <div className={className} ref={overlayRef} style={{ minHeight: height }}>
       <Header />
       <div className="container loading-wrapper">
         {
