@@ -52,6 +52,7 @@ ContentCardDisplay.propTypes = {
 const StyledContentCardDisplay = styled(ContentCardDisplay)`
   max-height: 10rem;
   overflow-y: scroll;
+  margin-bottom: 0.9rem;
 
   /* show translucent background if card showing on small device */
   ${({ activeCards, showTranscript }) => (activeCards.length > 0 || showTranscript === true
@@ -63,6 +64,7 @@ const StyledContentCardDisplay = styled(ContentCardDisplay)`
     max-height: 100%;
     background: none;
     outline: none;
+    margin-bottom: auto;
   }
   width: 100%;
 `;
