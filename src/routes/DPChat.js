@@ -82,12 +82,14 @@ const DPChat = ({
               // connect button
               : <button type="button" className={`btn btn-outline-success ${!connected && !loading ? '' : 'd-none'}`} onClick={dispatchCreateScene} data-tip="Connect">Connect</button>
             }
+            {/* on larger devices, show cards next to DP */}
             <div className="d-md-block d-none">
               <ContentCardDisplay />
             </div>
           </div>
           {/* bottom row */}
           <div>
+            {/* on smaller devices, show the cards over the DP, centered */}
             <div className="row">
               <div className="d-block d-md-none">
                 <ContentCardDisplay />
