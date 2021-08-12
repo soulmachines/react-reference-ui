@@ -516,8 +516,6 @@ const smSlice = createSlice({
       return { ...state, videoWidth, videoHeight };
     },
     disconnect: (state) => {
-      scene.onMessage = null;
-      scene.onDisconnected = null;
       scene = null;
       persona = null;
       const { error } = state;
