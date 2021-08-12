@@ -118,7 +118,7 @@ const Loading = ({
   return (
     <div className={className}>
       <Header />
-      <div className="container">
+      <div className="container loading-wrapper">
         {
           !error
             ? (
@@ -198,7 +198,7 @@ const StyledLoading = styled(Loading)`
     padding: 0;
   }
 
-  .container {
+  .loading-wrapper {
     padding-top: calc(${headerHeight} + 2rem);
     min-height: calc(100vh - ${headerHeight});
     display: flex;

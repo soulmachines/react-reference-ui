@@ -15,10 +15,10 @@ const Header = ({
 }) => {
   const { pathname } = useLocation();
   return (
-    <div className={className}>
+    <div className={`${className}`}>
       <div className="container">
         <div className="row">
-          <div className="d-flex justify-content-between align-items-center">
+          <div className="d-flex align-items-center justify-content-between">
             <div>
               {/* left align */}
               <Link to={logoLink}>
@@ -48,11 +48,12 @@ Header.propTypes = {
 };
 
 const StyledHeader = styled(Header)`
-  width: 100%;
   position: ${transparentHeader ? 'absolute' : 'relative'};
+  top: 0;
   z-index: 100;
-
+  width: 100%;
   background-color: ${transparentHeader ? 'none' : '#FFFFFF'};
+
 
   .row {
     height: ${headerHeight};
