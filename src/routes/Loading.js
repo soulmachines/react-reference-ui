@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import {
   ArrowRightCircleFill, CameraVideoFill, MicFill,
 } from 'react-bootstrap-icons';
+import { AnimatePresence, motion } from 'framer-motion';
 import { createScene } from '../store/sm';
 import Header from '../components/Header';
 import { headerHeight, landingBackground } from '../config';
@@ -30,7 +31,7 @@ const Loading = ({
   const history = useHistory();
 
   // if TOS hasn't been accepted, send to /
-  if (tosAccepted === false) history.push('/');
+  // if (tosAccepted === false) history.push('/');
 
   const pages = [
     <div>
@@ -56,6 +57,7 @@ const Loading = ({
         </div>
       </div>
     </div>,
+
     <div className="card">
       <div className="card-body">
         <p>
@@ -78,6 +80,7 @@ const Loading = ({
         </div>
       </div>
     </div>,
+
     <div className="card">
       <div className="card-body">
 
@@ -115,6 +118,22 @@ const Loading = ({
     </div>,
   ];
 
+  const variants = {
+    enter: {
+      x: 1000,
+      opacity: 0,
+    },
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: {
+      x: -1000,
+      opacity: 0,
+      position: 'absolute',
+    },
+  };
+
   return (
     <div className={className}>
       <Header />
@@ -123,7 +142,28 @@ const Loading = ({
           !error
             ? (
               <div className="col-md-6 offset-md-3">
-                {pages[displayedPage]}
+                <AnimatePresence initial={false}>
+                  {pages.flatMap((p, i) => {
+                    if (i !== displayedPage) return null;
+                    return (
+                      <motion.div
+                      // using indexes as keys is fine since the pages are pre-defined and static
+                      // eslint-disable-next-line react/no-array-index-key
+                        key={i}
+                        variants={variants}
+                        initial="enter"
+                        animate="center"
+                        exit="exit"
+                        transition={{
+                          x: { type: 'spring', stiffness: 300, damping: 30 },
+                          opacity: { duration: 0.2 },
+                        }}
+                      >
+                        {p}
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
               </div>
             )
             : (
