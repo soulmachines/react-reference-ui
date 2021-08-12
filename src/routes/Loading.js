@@ -238,8 +238,6 @@ Loading.defaultProps = {
 };
 
 const StyledLoading = styled(Loading)`
-  min-height: 100vh;
-
   background-image: url(${landingBackground});
   background-color: rgb(247, 232, 219);
   background-size: contain;
