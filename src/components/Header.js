@@ -16,20 +16,26 @@ const Header = ({
   const { pathname } = useLocation();
   return (
     <div className={className}>
-      <div>
-        {/* left align */}
-        <Link to={logoLink}>
-          <img src={logo} className="logo" alt={logoAltText} />
-        </Link>
-      </div>
-      <div>
-        {/* middle align */}
-      </div>
-      <div>
-        {/* right align */}
-        <button type="button" disabled={!connected} className={`btn btn-outline-danger ${connected && !loading && pathname === '/video' ? '' : 'd-none'}`} onClick={dispatchDisconnect} data-tip="Disconnect" data-place="bottom">
-          Exit
-        </button>
+      <div className="container">
+        <div className="row">
+          <div className="d-flex justify-content-between align-items-center">
+            <div>
+              {/* left align */}
+              <Link to={logoLink}>
+                <img src={logo} className="logo" alt={logoAltText} />
+              </Link>
+            </div>
+            <div>
+              {/* middle align */}
+            </div>
+            <div>
+              {/* right align */}
+              <button type="button" disabled={!connected} className={`btn btn-outline-danger ${connected && !loading && pathname === '/video' ? '' : 'd-none'}`} onClick={dispatchDisconnect} data-tip="Disconnect" data-place="bottom">
+                Exit
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -42,20 +48,15 @@ Header.propTypes = {
 };
 
 const StyledHeader = styled(Header)`
-  height: ${headerHeight};
   width: 100%;
-  padding-left: 2rem;
-  padding-right: 0.75rem;
-
   position: ${transparentHeader ? 'absolute' : 'relative'};
   z-index: 100;
 
   background-color: ${transparentHeader ? 'none' : '#FFFFFF'};
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
+  .row {
+    height: ${headerHeight};
+  }
   .logo {
     /* height constrain logo image */
     height: calc(0.6 * ${headerHeight});
