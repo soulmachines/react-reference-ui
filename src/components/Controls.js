@@ -320,6 +320,8 @@ const StyledControls = styled(Controls)`
     top: ${volumeMeterHeight * 0.5}px;
     display: flex;
     align-items: flex-end;
+    justify-content: center;
+    min-width: ${({ videoWidth }) => (videoWidth >= breakpoints.md ? 21 : 32)}px;
     .meter-component {
       /* don't use media queries for this since we need to write the value
       in the body of the component */
@@ -327,7 +329,7 @@ const StyledControls = styled(Controls)`
       background-size: ${({ videoWidth }) => (videoWidth >= breakpoints.md ? largeHeight : smallHeight)}px;
       background-position: bottom;
       background-repeat: no-repeat;
-      width: 21px;
+      min-width: ${({ videoWidth }) => (videoWidth >= breakpoints.md ? 21 : 28)}px;
       position: absolute;
     }
     .meter-component-1 {
