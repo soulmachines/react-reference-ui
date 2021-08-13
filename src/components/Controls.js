@@ -13,7 +13,7 @@ import micFill from '../img/mic-fill.svg';
 import breakpoints from '../utils/breakpoints';
 
 const volumeMeterHeight = 24;
-const volumeMeterMultiplier = 1.3;
+const volumeMeterMultiplier = 1.2;
 const smallHeight = volumeMeterHeight;
 const largeHeight = volumeMeterHeight * volumeMeterMultiplier;
 
