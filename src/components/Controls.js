@@ -304,7 +304,7 @@ const StyledControls = styled(Controls)`
   }
 
   .speaking-status {
-    width: 47px;
+    min-width: 47px;
   }
 
   .interrupt {
