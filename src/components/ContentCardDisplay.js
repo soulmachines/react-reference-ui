@@ -54,6 +54,11 @@ const StyledContentCardDisplay = styled(ContentCardDisplay)`
   overflow-y: scroll;
   margin-bottom: 0.9rem;
 
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   /* show translucent background if card showing on small device */
   ${({ activeCards, showTranscript }) => (activeCards.length > 0 || showTranscript === true
     ? `background: rgba(255, 255, 255, 0.3);
