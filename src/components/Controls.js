@@ -11,6 +11,7 @@ import {
 import mic from '../img/mic.svg';
 import micFill from '../img/mic-fill.svg';
 import breakpoints from '../utils/breakpoints';
+import { mediaStreamProxy } from '../proxyVideo';
 
 const volumeMeterHeight = 24;
 const volumeMeterMultiplier = 1.2;
@@ -31,6 +32,7 @@ const Controls = ({
   showTranscript,
   transcript,
   videoWidth,
+  connected,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [inputFocused, setInputFocused] = useState(false);
@@ -66,63 +68,58 @@ const Controls = ({
   }, [userSpeaking, lastUserUtterance]);
 
   useEffect(async () => {
-    // credit: https://stackoverflow.com/a/64650826
-    let volumeCallback = null;
-    let audioStream;
-    let audioContext;
-    let audioSource;
-    const unmounted = false;
-    // Initialize
-    try {
-      audioStream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: true,
-        },
-      });
-      audioContext = new AudioContext();
-      audioSource = audioContext.createMediaStreamSource(audioStream);
-      const analyser = audioContext.createAnalyser();
-      analyser.fftSize = 512;
-      analyser.minDecibels = -127;
-      analyser.maxDecibels = 0;
-      analyser.smoothingTimeConstant = 0.4;
-      audioSource.connect(analyser);
-      const volumes = new Uint8Array(analyser.frequencyBinCount);
-      volumeCallback = () => {
-        analyser.getByteFrequencyData(volumes);
-        let volumeSum = 0;
-        volumes.forEach((v) => { volumeSum += v; });
-        // multiply value by 2 so the volume meter appears more responsive
-        // (otherwise the fill doesn't always show)
-        const averageVolume = (volumeSum / volumes.length) * 2;
-        // Value range: 127 = analyser.maxDecibels - analyser.minDecibels;
-        setVolume(averageVolume > 127 ? 127 : averageVolume);
-      };
-      // runs every time the window paints
-      const volumeDisplay = () => {
-        window.requestAnimationFrame(() => {
-          if (!unmounted) {
-            volumeCallback();
-            volumeDisplay();
-          }
-        });
-      };
-      volumeDisplay();
-    } catch (e) {
-      console.error('Failed to initialize volume visualizer!', e);
-    }
+    if (connected) {
+      // credit: https://stackoverflow.com/a/64650826
+      let volumeCallback = null;
+      let audioStream;
+      let audioContext;
+      let audioSource;
+      let unmounted = false;
+      // Initialize
+      try {
+        audioStream = mediaStreamProxy.getUserMediaStream();
+        audioContext = new AudioContext();
+        audioSource = audioContext.createMediaStreamSource(audioStream.stream);
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 512;
+        analyser.minDecibels = -127;
+        analyser.maxDecibels = 0;
+        analyser.smoothingTimeConstant = 0.4;
+        audioSource.connect(analyser);
+        const volumes = new Uint8Array(analyser.frequencyBinCount);
+        volumeCallback = () => {
+          analyser.getByteFrequencyData(volumes);
+          let volumeSum = 0;
+          volumes.forEach((v) => { volumeSum += v; });
+          // multiply value by 2 so the volume meter appears more responsive
+          // (otherwise the fill doesn't always show)
+          const averageVolume = (volumeSum / volumes.length) * 2;
+          // Value range: 127 = analyser.maxDecibels - analyser.minDecibels;
+          setVolume(averageVolume > 127 ? 127 : averageVolume);
+        };
+        // runs every time the window paints
+        const volumeDisplay = () => {
+          window.requestAnimationFrame(() => {
+            if (!unmounted) {
+              volumeCallback();
+              volumeDisplay();
+            }
+          });
+        };
+        volumeDisplay();
+      } catch (e) {
+        console.error('Failed to initialize volume visualizer!', e);
+      }
 
-    return () => {
-      console.log('closing down the audio stuff');
-      // FIXME: tracking #79
-      // unmounted = true;
-      // audioStream.getTracks().forEach((track) => {
-      //   track.stop();
-      // });
-      // audioContext.close();
-      // audioSource.close();
-    };
-  }, []);
+      return () => {
+        console.log('closing down the audio stuff');
+        // FIXME: tracking #79
+        unmounted = true;
+        audioContext.close();
+        audioSource.close();
+      };
+    }
+  }, [connected]);
 
   useEffect(() => {
     // check window width, if larger display then increase mic indicator size
@@ -267,6 +264,7 @@ Controls.propTypes = {
   dispatchToggleShowTranscript: PropTypes.func.isRequired,
   transcript: PropTypes.arrayOf(PropTypes.object).isRequired,
   videoWidth: PropTypes.number.isRequired,
+  connected: PropTypes.bool.isRequired,
 };
 
 const StyledControls = styled(Controls)`
@@ -354,6 +352,7 @@ const mapStateToProps = (state) => ({
   showTranscript: state.sm.showTranscript,
   transcript: state.sm.transcript,
   videoWidth: state.sm.videoWidth,
+  connected: state.sm.connected,
 });
 
 const mapDispatchToProps = (dispatch) => ({
