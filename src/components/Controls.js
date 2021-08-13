@@ -183,7 +183,7 @@ const Controls = ({
       <div className="row">
         <div className={`d-${showTextInput ? 'flex' : 'none'} d-md-none justify-content-between align-items-end pb-2`}>
           <div>{ transcriptButton }</div>
-          <div>{ interruptButton }</div>
+          <div className={speechState === 'speaking' ? 'interrupt' : 'interrupt interrupt-active'}>{ interruptButton }</div>
         </div>
       </div>
       <div className="row mb-3 display-flex justify-content-center">
@@ -233,8 +233,7 @@ const Controls = ({
           </div>
         </form>
         <div className={`col-auto d-md-block d-${showTextInput ? 'none' : 'block'}`}>
-          {' '}
-          { interruptButton }
+          <div className={speechState === 'speaking' ? 'interrupt' : 'interrupt interrupt-active'}>{ interruptButton }</div>
         </div>
       </div>
     </div>
@@ -294,6 +293,14 @@ const StyledControls = styled(Controls)`
     width: 47px;
   }
 
+  .interrupt {
+    opacity: 1;
+    transition: opacity 0.1s;
+  }
+  .interrupt-active {
+    opacity: 0;
+  }
+
   .volume-display {
     position: relative;
     top: ${volumeMeterHeight * 0.5}px;
@@ -334,6 +341,7 @@ const mapStateToProps = (state) => ({
   speechState: state.sm.speechState,
   showTranscript: state.sm.showTranscript,
   transcript: state.sm.transcript,
+  speechState: state.sm.speechState,
 });
 
 const mapDispatchToProps = (dispatch) => ({
