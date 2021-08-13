@@ -37,10 +37,10 @@ const DPChat = ({
     handleResize();
     window.addEventListener('resize', handleResize);
     // cleanup
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      dispatchDisconnect();
-    };
+    // return () => {
+    //   window.removeEventListener('resize', handleResize);
+    //   dispatchDisconnect();
+    // };
   }, []);
 
   const history = useHistory();
@@ -48,7 +48,7 @@ const DPChat = ({
     if (error !== null) history.push('/loading?error=true');
   }, [error]);
   // if TOS hasn't been accepted, send to /
-  if (tosAccepted === false) history.push('/');
+  // if (tosAccepted === false) history.push('/');
 
   return (
     <div className={className}>
