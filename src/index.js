@@ -2,16 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import { createGlobalStyle } from 'styled-components';
 import Router from './Router';
 import store from './store';
 import reportWebVitals from './reportWebVitals';
-
-const GlobalStyle = createGlobalStyle`
-  svg {
-    vertical-align: -0.125em;
-  }
-`;
+import GlobalStyle from './globalStyle';
 
 ReactDOM.render(
   <React.StrictMode>

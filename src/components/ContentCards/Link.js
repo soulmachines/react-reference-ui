@@ -20,7 +20,7 @@ const Link = ({ data, className }) => {
             {/* open link in new tab */}
             <a href={url} className="btn btn-primary" target="_blank" rel="noreferrer">
               Visit Link
-              <ArrowUpRightSquare size={18} />
+              <ArrowUpRightSquare />
             </a>
           </div>
         </div>
