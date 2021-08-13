@@ -168,7 +168,7 @@ const Controls = ({
               ${(transcript.length === 0 && intermediateUserUtterance === '') || hideInputDisplay ? 'hide-input' : 'show-input'}
               `}
     >
-      <div className="text-wrap text-start">
+      <div className="text-wrap text-start input-display">
         { userSpeaking ? 'Listening: ' : 'I heard: '}
         {placeholder || lastUserUtterance}
         {

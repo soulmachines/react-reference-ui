@@ -18,7 +18,7 @@ export default createGlobalStyle`
       padding-left: ${buttonSidePadding};
     }
   }
-  .form-control {
+  .form-control, .input-display, .captions {
     @media (min-width: ${breakpoints.md}px) {
       font-size: 1.8rem;
     }
