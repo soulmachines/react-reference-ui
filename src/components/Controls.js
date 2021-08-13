@@ -118,7 +118,7 @@ const Controls = ({
         audioContext.close();
         audioSource.close();
       };
-    }
+    } return false;
   }, [connected]);
 
   useEffect(() => {
@@ -352,7 +352,6 @@ const mapStateToProps = (state) => ({
   showTranscript: state.sm.showTranscript,
   transcript: state.sm.transcript,
   videoWidth: state.sm.videoWidth,
-  connected: state.sm.connected,
 });
 
 const mapDispatchToProps = (dispatch) => ({
