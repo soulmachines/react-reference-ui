@@ -147,6 +147,7 @@ const Controls = ({
       className={`btn btn-${showTranscript ? '' : 'outline-'}secondary`}
       aria-label="Toggle Transcript"
       data-tip="Toggle Transcript"
+      data-place="top"
       onClick={dispatchToggleShowTranscript}
       disabled={transcript.length === 0}
     >
@@ -155,7 +156,7 @@ const Controls = ({
   );
 
   const interruptButton = (
-    <button type="button" className="btn btn-outline-secondary" disabled={speechState !== 'speaking'} onClick={dispatchStopSpeaking} data-tip="Stop Speaking">
+    <button type="button" className="btn btn-outline-secondary" disabled={speechState !== 'speaking'} onClick={dispatchStopSpeaking} data-tip="Stop Speaking" data-place="top">
       <XOctagonFill />
     </button>
   );
@@ -219,6 +220,7 @@ const Controls = ({
               className={`btn btn-${showTextInput ? 'secondary' : 'outline-secondary'}`}
               aria-label="Toggle Keyboard Input"
               data-tip="Toggle Keyboard Input"
+              data-place="top"
               onClick={toggleKeyboardInput}
             >
               <Keyboard />
