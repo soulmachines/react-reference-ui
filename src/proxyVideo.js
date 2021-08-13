@@ -41,13 +41,13 @@ class UserMediaStream {
 
   getUserMediaStream = () => this.userMediaStream;
 
-  // NOTE: renders emotional recognition nonfunctional, not reccomended for use as of 7/14/21
+  // NOTE: renders emotional recognition nonfunctional, not recommended for use as of 7/14/21
   // if we toggle video, we need to provide scene w/ the new feed
   enableToggle = (scene) => {
     this.scene = scene;
   }
 
-  // NOTE: renders emotional recognition nonfunctional, not reccomended for use as of 7/14/21
+  // NOTE: renders emotional recognition nonfunctional, not recommended for use as of 7/14/21
   toggleVideo = async () => {
     if (this.scene !== null) {
       const { videoOff, userMediaStream } = this;
