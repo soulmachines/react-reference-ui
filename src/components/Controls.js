@@ -79,7 +79,7 @@ const Controls = ({
       try {
         audioStream = mediaStreamProxy.getUserMediaStream();
         audioContext = new AudioContext();
-        audioSource = audioContext.createMediaStreamSource(audioStream.stream);
+        audioSource = audioContext.createMediaStreamSource(audioStream);
         const analyser = audioContext.createAnalyser();
         analyser.fftSize = 512;
         analyser.minDecibels = -127;

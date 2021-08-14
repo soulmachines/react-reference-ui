@@ -381,7 +381,7 @@ export const createScene = createAsyncThunk('sm/createScene', async (audioOnly =
     if (videoEnabled === false) thunk.dispatch(actions.setCameraState({ cameraOn: false }));
     // pass dispatch before calling setUserMediaStream so proxy can send dimensions to store
     mediaStreamProxy.passDispatch(thunk.dispatch);
-    mediaStreamProxy.setUserMediaStream({ stream, audioOnly: !videoEnabled });
+    mediaStreamProxy.setUserMediaStream(stream, videoEnabled);
     mediaStreamProxy.enableToggle(scene);
 
     // fulfill promise, reducer sets state to indicate loading and connection are complete

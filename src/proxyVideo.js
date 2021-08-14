@@ -16,7 +16,6 @@ class UserMediaStream {
     this.videoOff = false;
     this.dispatch = null;
     this.scene = null;
-    this.audioOnly = false;
   }
 
   // use dispatch to tell redux state what camera state is
@@ -26,12 +25,12 @@ class UserMediaStream {
   }
 
   setUserMediaStream = (stream, audioOnly = false) => {
+    this.videoOff = !audioOnly;
     // call passDispatch before this so we have access to store
     if (this.dispatch === null) throw new Error('call passDispatch() before setUserMediaStream()!');
     // store stream data so we can access it later
     if (stream !== null) this.userMediaStream = stream;
-    if (audioOnly === true) {
-      this.videoOff = true;
+    if (audioOnly === false) {
       // send webcam stream dimensions to store
       const track = stream.getVideoTracks()[0];
       const { width: cameraWidth, height: cameraHeight } = track.getSettings();

@@ -10,7 +10,8 @@ const CameraPreview = ({ connected, className, cameraOn }) => {
   const stream = mediaStreamProxy.getUserMediaStream();
 
   useEffect(() => {
-    if (stream !== null && mediaStreamProxy.videoOff === true) {
+    console.log('crane', mediaStreamProxy)
+    if (stream !== null && mediaStreamProxy.videoOff === false) {
       // display webcam preview in video elem
       videoRef.current.srcObject = stream;
     }
