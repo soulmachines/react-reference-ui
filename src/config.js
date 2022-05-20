@@ -8,11 +8,12 @@ export const logo = smLogo;
 export const logoAltText = 'Soul Machines logo';
 export const logoLink = '/';
 
+export const primaryAccent = 'rgb(22, 62, 106)';
 // background image is positioned in a way that is best for pictures of the persona's face.
 // adjust spacing as necessary in Landing.js for different images
 // if you want just a color, set landingBackgroundImage to null
 // if desired, a gradient can also be added to landingBackgroundColor
-export const landingBackgroundColor = '#fff';
+export const landingBackgroundColor = '#F8F8F8';
 export const landingBackgroundImage = null;
 
 // if set to true, on disconnect, the app will redirect to the specified route.

@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { primaryAccent } from './config';
 import breakpoints from './utils/breakpoints';
 
 const buttonSidePadding = '0.8rem';
@@ -22,5 +23,20 @@ export default createGlobalStyle`
     @media (min-width: ${breakpoints.md}px) {
       font-size: 1.8rem;
     }
+  }
+  .text-button {
+    padding: 0;
+
+    background: none;
+    border: none;
+    color: rgb(33, 37, 41);
+    text-decoration: underline;
+  }
+  .primary-accent, h1, h2 {
+    color: ${primaryAccent};
+  }
+  .primary-accent.btn {
+    color: #FFF;
+    background: ${primaryAccent};
   }
 `;

@@ -38,7 +38,7 @@ const DPChat = ({
   };
 
   const cleanup = () => {
-    if (Date.now() - startedAt < 1000) {
+    if (Date.now() - startedAt < 100) {
       console.warn('cleanup function invoked less than 1 second after component mounted, ignoring!');
     } else {
       console.log('cleanup function invoked!');
