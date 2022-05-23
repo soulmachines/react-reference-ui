@@ -1,15 +1,17 @@
 import React from 'react';
 import {
-  CameraVideo, LightningCharge, Soundwave,
+  CameraVideo, LightningCharge, Soundwave, X,
 } from 'react-bootstrap-icons';
-import styled from 'styled-components';
-import Header from './Header';
-import { landingBackgroundImage, landingBackgroundColor } from '../config';
 import { Link } from 'react-router-dom';
 
-const Tutorial = ({ className }) => (
-  <div className={className}>
-    <div className="p-2">
+const Tutorial = ({ hide }) => (
+  <div className="container">
+    <div className="d-grid m-2">
+      <button onClick={() => hide()} type="button" className="primary-accent-outline btn">
+        Back
+      </button>
+    </div>
+    <div className="p-2 card-group">
       <div className="card mb-2" key="page-1">
         <div className="card-body">
           <div className="text-center">
@@ -24,9 +26,6 @@ const Tutorial = ({ className }) => (
               camera when we request it.
             </b>
           </p>
-          <div className="d-grid gap-2 d-md-none d-block">
-            {/* <button type="button" onClick={createSceneAndIteratePage} className="btn btn-primary">Next</button> */}
-          </div>
         </div>
       </div>
       <div className="card mb-2" key="page-2">
@@ -50,9 +49,6 @@ const Tutorial = ({ className }) => (
           <p>
             If that happens, try finding a location with a better connection and try again.
           </p>
-          <div className="d-grid gap-2 d-md-none d-block">
-            {/* <button type="button" onClick={() => setDisplayedPage(displayedPage + 1)} className="btn btn-primary">Next</button> */}
-          </div>
         </div>
       </div>
       <div className="card mb-2" key="page-3">
@@ -74,6 +70,8 @@ const Tutorial = ({ className }) => (
           </div>
         </div>
       </div>
+    </div>
+    <div className="ms-2 mb-2">
       <Link to="/loading" className="btn primary-accent">
         Let&apos;s begin
       </Link>

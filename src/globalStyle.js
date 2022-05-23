@@ -39,4 +39,8 @@ export default createGlobalStyle`
     color: #FFF;
     background: ${primaryAccent};
   }
+  .primary-accent-outline.btn {
+    border: 1px solid ${primaryAccent};
+    color: ${primaryAccent}
+  }
 `;

@@ -9,6 +9,7 @@ import { headerHeight, landingBackgroundImage, landingBackgroundColor } from '..
 import { setTOS } from '../store/sm/index';
 import eula from '../eula';
 import Tutorial from '../components/Tutorial';
+import breakpoints from '../utils/breakpoints';
 
 const Landing = ({ className, dispatchAcceptTOS }) => {
   const [showTutorial, setShowTutorial] = useState(false);
@@ -19,19 +20,19 @@ const Landing = ({ className, dispatchAcceptTOS }) => {
         <h1 className="fw-bold mb-3">
           Let&apos;s get started.
         </h1>
-        <div className="d-flex justify-content-center align-items-center mb-4">
+        <div className="d-flex justify-content-left align-items-center mb-4">
           <div className="landing-icon">
             <Mic size={14} />
           </div>
           This website requires use of your computer’s microphone and speaker.
         </div>
-        <div className="d-flex justify-content-center align-items-center mb-4">
+        <div className="d-flex justify-content-left align-items-center mb-4">
           <div className="landing-icon">
             <CameraVideo size={14} />
           </div>
           Your computer’s camera is optional for this website.
         </div>
-        <div className="d-flex justify-content-center align-items-center mb-4">
+        <div className="d-flex justify-content-left align-items-center mb-4">
           <div className="landing-icon">
             <Question size={14} />
           </div>
@@ -64,7 +65,7 @@ const Landing = ({ className, dispatchAcceptTOS }) => {
       <Header />
       {
       showTutorial
-        ? <Tutorial />
+        ? <Tutorial hide={() => setShowTutorial(false)} />
         : <MainContent />
     }
     </div>
@@ -78,11 +79,14 @@ Landing.propTypes = {
 
 const StyledLanding = styled(Landing)`
   background: ${landingBackgroundImage ? `url(${landingBackgroundImage})` : ''} ${landingBackgroundColor ? `${landingBackgroundColor};` : ''};
-  background-size: contain;
   background-repeat: no-repeat;
   background-position: center bottom;
   min-height: 100vh;
   min-width: 100vw;
+
+  @media(min-width: ${breakpoints.md}px) {
+    font-size: 1.3rem;
+  }
 
   h2 {
     margin-bottom: 1.5rem;

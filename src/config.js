@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import smLogo from './img/sm-logo-retina.webp';
+import aria from './img/aria-removebg.png';
 
 // header will not take up vertical height when transparent, so you need to be mindful of overlap
 export const transparentHeader = true;
@@ -13,8 +14,8 @@ export const primaryAccent = 'rgb(22, 62, 106)';
 // adjust spacing as necessary in Landing.js for different images
 // if you want just a color, set landingBackgroundImage to null
 // if desired, a gradient can also be added to landingBackgroundColor
-export const landingBackgroundColor = '#F8F8F8';
-export const landingBackgroundImage = null;
+export const landingBackgroundColor = '#FFF';
+export const landingBackgroundImage = aria;
 
 // if set to true, on disconnect, the app will redirect to the specified route.
 // if false, it will redirect to /
