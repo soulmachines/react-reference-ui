@@ -1,13 +1,11 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { AnimatePresence, motion } from 'framer-motion';
 import { createScene } from '../store/sm';
 import Header from '../components/Header';
 import { headerHeight, landingBackgroundImage, landingBackgroundColor } from '../config';
-import breakpoints from '../utils/breakpoints';
 
 const Loading = ({
   className, connected, loading, dispatchCreateScene, error, tosAccepted,
@@ -38,7 +36,7 @@ const Loading = ({
     <div className={className}>
       <Header />
       <div className="text-center">
-        <div className="spinner-border primary-accent" role="status" style={{ width: '3rem', height: '3rem'}}>
+        <div className="spinner-border primary-accent" role="status" style={{ width: '3rem', height: '3rem' }}>
           <span className="visually-hidden">Loading...</span>
         </div>
       </div>
@@ -65,7 +63,6 @@ Loading.defaultProps = {
 
 const StyledLoading = styled(Loading)`
   background: ${landingBackgroundImage ? `url(${landingBackgroundImage})` : ''} ${landingBackgroundColor ? `${landingBackgroundColor};` : ''};
-  background-size: contain;
   background-repeat: no-repeat;
   background-position: center bottom;
 
