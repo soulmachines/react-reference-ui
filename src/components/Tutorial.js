@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  CameraVideo, LightningCharge, Soundwave, X,
+  CameraVideo, LightningCharge, Soundwave,
 } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const Tutorial = ({ hide }) => (
   <div className="container">
@@ -78,5 +79,9 @@ const Tutorial = ({ hide }) => (
     </div>
   </div>
 );
+
+Tutorial.propTypes = {
+  hide: PropTypes.func.isRequired,
+};
 
 export default Tutorial;
