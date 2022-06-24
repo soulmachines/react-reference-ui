@@ -4,6 +4,8 @@ This template succeeds the previous [react-template](https://github.com/soulmach
 
 This template serves as "opinionated documentation," in that it contains most of the functionality that UI's should have and how to use it. As members of Soul Machines Customer Success engineering, we believe this is a good example of how the user flow and interaction with the Digital Person should work. This template is provided with the expectation that most, if not all, of the styling will be altered.
 
+A live version that demos the current functionality can be seen [here](https://ui-test-persona-nhyv.wl.r.appspot.com/).
+
 ## Setup
 
 In order to run this application, you'll either need an API key or a token server. Most projects will use an API key--token servers are only necessary when interfacing with a non-native NLP through a orchestration server.
