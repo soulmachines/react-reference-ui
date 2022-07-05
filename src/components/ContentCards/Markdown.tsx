@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import PropTypes from 'prop-types';
 
-function Markdown({ data }) {
+type Props = {
+    data: {
+        text: string;
+    };
+};
+
+function Markdown({ data }: Props) {
   const { text } = data;
   return (
     <div className="card">
@@ -12,11 +17,5 @@ function Markdown({ data }) {
     </div>
   );
 }
-
-Markdown.propTypes = {
-  data: PropTypes.shape({
-    text: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 export default Markdown;

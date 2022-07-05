@@ -1,7 +1,7 @@
 import React, { createRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import {
   ChatSquareDotsFill, Keyboard, MicMuteFill, XOctagonFill,
 } from 'react-bootstrap-icons';
@@ -9,7 +9,9 @@ import ReactTooltip from 'react-tooltip';
 import {
   sendTextMessage, mute, stopSpeaking, setShowTranscript,
 } from '../store/sm/index';
+// @ts-expect-error TS(2307): Cannot find module '../img/mic.svg' or its corresp... Remove this comment to see the full error message
 import mic from '../img/mic.svg';
+// @ts-expect-error TS(2307): Cannot find module '../img/mic-fill.svg' or its co... Remove this comment to see the full error message
 import micFill from '../img/mic-fill.svg';
 import breakpoints from '../utils/breakpoints';
 import { mediaStreamProxy } from '../proxyVideo';
@@ -19,23 +21,30 @@ const volumeMeterMultiplier = 1.2;
 const smallHeight = volumeMeterHeight;
 const largeHeight = volumeMeterHeight * volumeMeterMultiplier;
 
+type ControlsProps = {
+    className: string;
+    intermediateUserUtterance: string;
+    lastUserUtterance: string;
+    userSpeaking: boolean;
+    dispatchText: (...args: any[]) => any;
+    dispatchMute: (...args: any[]) => any;
+    isMuted: boolean;
+    speechState: string;
+    dispatchStopSpeaking: (...args: any[]) => any;
+    showTranscript: boolean;
+    dispatchToggleShowTranscript: (...args: any[]) => any;
+    transcript: {
+        source?: string;
+        text?: string;
+    }[];
+    videoWidth: number;
+    connected: boolean;
+    typingOnly: boolean;
+};
+
 function Controls({
-  className,
-  intermediateUserUtterance,
-  lastUserUtterance,
-  userSpeaking,
-  dispatchText,
-  dispatchMute,
-  isMuted,
-  speechState,
-  dispatchStopSpeaking,
-  dispatchToggleShowTranscript,
-  showTranscript,
-  transcript,
-  videoWidth,
-  connected,
-  typingOnly,
-}) {
+  className, intermediateUserUtterance, lastUserUtterance, userSpeaking, dispatchText, dispatchMute, isMuted, speechState, dispatchStopSpeaking, dispatchToggleShowTranscript, showTranscript, transcript, videoWidth, connected, typingOnly,
+}: ControlsProps) {
   const [inputValue, setInputValue] = useState('');
   const [inputFocused, setInputFocused] = useState(false);
   const [volume, setVolume] = useState(0);
@@ -44,13 +53,13 @@ function Controls({
   const isLarger = videoWidth >= breakpoints.md ? largeHeight : smallHeight;
   const [responsiveVolumeHeight, setResponsiveVolumeHeight] = useState(isLarger);
 
-  const handleInput = (e) => setInputValue(e.target.value);
+  const handleInput = (e: any) => setInputValue(e.target.value);
   const handleFocus = () => {
     setInputFocused(true);
     setInputValue('');
   };
   const handleBlur = () => setInputFocused(false);
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     dispatchText(inputValue);
     setInputValue('');
@@ -58,7 +67,7 @@ function Controls({
 
   if (userSpeaking === true && inputValue !== '' && inputFocused === false) setInputValue('');
 
-  let timeout;
+  let timeout: any;
   useEffect(() => {
     if (userSpeaking === true || lastUserUtterance.length > 0) setHideInputDisplay(false);
     const createTimeout = () => setTimeout(() => {
@@ -69,13 +78,14 @@ function Controls({
     return () => clearTimeout(timeout);
   }, [userSpeaking, lastUserUtterance, isMuted]);
 
+  // @ts-expect-error TS(2345): Argument of type '() => Promise<false | (() => voi... Remove this comment to see the full error message
   useEffect(async () => {
     if (connected && typingOnly === false) {
       // credit: https://stackoverflow.com/a/64650826
-      let volumeCallback = null;
+      let volumeCallback: any = null;
       let audioStream;
-      let audioContext;
-      let audioSource;
+      let audioContext: any;
+      let audioSource: any;
       let unmounted = false;
       // Initialize
       try {
@@ -141,7 +151,7 @@ function Controls({
   // when we switch to keyboard input, capture focus
   const textInput = createRef();
   useEffect(() => {
-    if (showTextInput === true) textInput.current.focus();
+    if (showTextInput === true) (textInput as any).current.focus();
   }, [showTextInput]);
 
   useEffect(() => {
@@ -243,6 +253,7 @@ function Controls({
               aria-label="Toggle Keyboard Input"
               data-tip="Toggle Keyboard Input"
               data-place="top"
+              // @ts-expect-error TS(2322): Type '(() => void) | null' is not assignable to ty... Remove this comment to see the full error message
               onClick={typingOnly ? null : toggleKeyboardInput}
             >
               <Keyboard />
@@ -258,6 +269,7 @@ function Controls({
                       onFocus={handleFocus}
                       onBlur={handleBlur}
                       aria-label="Keyboard input"
+                      // @ts-expect-error TS(2322): Type 'RefObject<unknown>' is not assignable to typ... Remove this comment to see the full error message
                       ref={textInput}
                     />
                   )
@@ -274,29 +286,8 @@ function Controls({
   );
 }
 
-Controls.propTypes = {
-  className: PropTypes.string.isRequired,
-  intermediateUserUtterance: PropTypes.string.isRequired,
-  lastUserUtterance: PropTypes.string.isRequired,
-  userSpeaking: PropTypes.bool.isRequired,
-  dispatchText: PropTypes.func.isRequired,
-  dispatchMute: PropTypes.func.isRequired,
-  isMuted: PropTypes.bool.isRequired,
-  speechState: PropTypes.string.isRequired,
-  dispatchStopSpeaking: PropTypes.func.isRequired,
-  showTranscript: PropTypes.bool.isRequired,
-  dispatchToggleShowTranscript: PropTypes.func.isRequired,
-  transcript: PropTypes.arrayOf(PropTypes.shape({
-    source: PropTypes.string,
-    text: PropTypes.string,
-  })).isRequired,
-  videoWidth: PropTypes.number.isRequired,
-  connected: PropTypes.bool.isRequired,
-  typingOnly: PropTypes.bool.isRequired,
-};
-
 const StyledControls = styled(Controls)`
-  display: ${(props) => (props.connected ? '' : 'none')};
+  display: ${(props: any) => (props.connected ? '' : 'none')};
 
   .form-control {
     opacity: 0.8;
@@ -326,7 +317,9 @@ const StyledControls = styled(Controls)`
   .show-input {
     position: relative;
     bottom: 0rem;
-    opacity: ${({ userSpeaking }) => (userSpeaking ? 0.7 : 1)};;
+    opacity: ${({
+    userSpeaking,
+  }: any) => (userSpeaking ? 0.7 : 1)};;
   }
 
   .speaking-status {
@@ -350,15 +343,23 @@ const StyledControls = styled(Controls)`
     display: flex;
     align-items: flex-end;
     justify-content: start;
-    min-width: ${({ videoWidth }) => (videoWidth <= breakpoints.md ? 21 : 32)}px;
+    min-width: ${({
+    videoWidth,
+  }: any) => (videoWidth <= breakpoints.md ? 21 : 32)}px;
     .meter-component {
       /* don't use media queries for this since we need to write the value
       in the body of the component */
-      height: ${({ videoWidth }) => (videoWidth >= breakpoints.md ? largeHeight : smallHeight)}px;
-      background-size: ${({ videoWidth }) => (videoWidth >= breakpoints.md ? largeHeight : smallHeight)}px;
+      height: ${({
+    videoWidth,
+  }: any) => (videoWidth >= breakpoints.md ? largeHeight : smallHeight)}px;
+      background-size: ${({
+    videoWidth,
+  }: any) => (videoWidth >= breakpoints.md ? largeHeight : smallHeight)}px;
       background-position: bottom;
       background-repeat: no-repeat;
-      min-width: ${({ videoWidth }) => (videoWidth <= breakpoints.md ? 21 : 28)}px;
+      min-width: ${({
+    videoWidth,
+  }: any) => (videoWidth <= breakpoints.md ? 21 : 28)}px;
       position: absolute;
     }
     .meter-component-1 {
@@ -373,7 +374,7 @@ const StyledControls = styled(Controls)`
 
 `;
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   intermediateUserUtterance: state.sm.intermediateUserUtterance,
   lastUserUtterance: state.sm.lastUserUtterance,
   userSpeaking: state.sm.userSpeaking,
@@ -386,10 +387,14 @@ const mapStateToProps = (state) => ({
   typingOnly: state.sm.typingOnly,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  dispatchText: (text) => dispatch(sendTextMessage({ text })),
-  dispatchMute: (muteState) => dispatch(mute(muteState)),
+const mapDispatchToProps = (dispatch: any) => ({
+  // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
+  dispatchText: (text: any) => dispatch(sendTextMessage({ text })),
+  // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
+  dispatchMute: (muteState: any) => dispatch(mute(muteState)),
+  // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
   dispatchStopSpeaking: () => dispatch(stopSpeaking()),
+  // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
   dispatchToggleShowTranscript: () => dispatch(setShowTranscript()),
 });
 

@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import ContentCardSwitch from '../ContentCardSwitch';
 
-function Transcript({ className, transcript }) {
+type TranscriptProps = {
+    className: string;
+    transcript: {
+        source?: string;
+        text?: string;
+        timestamp?: string;
+    }[];
+};
+
+function Transcript({ className, transcript }: TranscriptProps) {
   const transcriptDisplay = transcript.map(({
+    // @ts-expect-error TS(2339): Property 'card' does not exist on type '{ source?:... Remove this comment to see the full error message
     source, text, card, timestamp,
   }) => {
     // we don't want to wrap cards in a bubble, return as is w/ a key added
@@ -13,6 +23,7 @@ function Transcript({ className, transcript }) {
       return (
         <ContentCardSwitch
           card={card}
+          // @ts-expect-error TS(2322): Type 'null' is not assignable to type 'number'.
           index={null}
           key={timestamp}
           inTranscript
@@ -29,7 +40,7 @@ function Transcript({ className, transcript }) {
   });
 
   // scroll to bottom of transcript whenever it updates
-  let scrollRef;
+  let scrollRef: any;
   const [isMounting, setIsMounting] = useState(true);
   useEffect(() => {
     scrollRef.scrollIntoView({ behavior: isMounting ? 'instant' : 'smooth' });
@@ -51,15 +62,6 @@ function Transcript({ className, transcript }) {
     </div>
   );
 }
-
-Transcript.propTypes = {
-  className: PropTypes.string.isRequired,
-  transcript: PropTypes.arrayOf(PropTypes.shape({
-    source: PropTypes.string,
-    text: PropTypes.string,
-    timestamp: PropTypes.string,
-  })).isRequired,
-};
 
 const StyledTranscript = styled(Transcript)`
     width: 100%;
@@ -96,7 +98,9 @@ const StyledTranscript = styled(Transcript)`
   }
 `;
 
-const mapStateToProps = ({ sm }) => ({
+const mapStateToProps = ({
+  sm,
+}: any) => ({
   transcript: sm.transcript,
 });
 

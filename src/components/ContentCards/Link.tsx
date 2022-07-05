@@ -1,9 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { ArrowUpRightSquare } from 'react-bootstrap-icons';
 
-function Link({ data, className }) {
+type Props = {
+    data: {
+        [key: string]: any;
+    }; // TODO: { url: PropTypes.string.isRequired, title: PropTypes.string.isRequired, imageUrl: PropTypes.string.isRequired, description: PropTypes.string.isRequired, imageAltText: PropTypes.string, }
+    className: string;
+};
+
+function Link({ data, className }: Props) {
   const {
     title, url, imageUrl, description, imageAltText,
   } = data;
@@ -28,17 +35,6 @@ function Link({ data, className }) {
     </div>
   );
 }
-
-Link.propTypes = {
-  data: PropTypes.objectOf({
-    url: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    imageAltText: PropTypes.string,
-  }).isRequired,
-  className: PropTypes.string.isRequired,
-};
 
 export default styled(Link)`
   width: 20rem;

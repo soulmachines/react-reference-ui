@@ -5,9 +5,13 @@ import proxyVideo, { mediaStreamProxy } from '../../proxyVideo';
 import roundObject from '../../utils/roundObject';
 import { meatballString } from './meatball';
 
+// @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
 const ORCHESTRATION_MODE = process.env.REACT_APP_ORCHESTRATION_MODE || false;
+// @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
 const AUTH_MODE = parseInt(process.env.REACT_APP_PERSONA_AUTH_MODE, 10) || 0;
+// @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
 const API_KEY = process.env.REACT_APP_API_KEY || '';
+// @ts-expect-error TS(2580): Cannot find name 'process'. Do you need to install... Remove this comment to see the full error message
 const TOKEN_ISSUER = process.env.REACT_APP_TOKEN_URL;
 const PERSONA_ID = '1';
 // CAMERA_ID commented out because CUE manages camera
@@ -87,9 +91,9 @@ const initialState = {
 
 // host actions object since we need the types to be available for
 // async calls later, e.g. handling messages from persona
-let actions;
-let persona = null;
-let scene = null;
+let actions: any;
+let persona: any = null;
+let scene: any = null;
 
 /**
  * Animate the camera to the desired settings.
@@ -117,7 +121,7 @@ export const animateCamera = createAsyncThunk('sm/animateCamera', () => {
 
 // tells persona to stop listening to mic input
 export const mute = createAsyncThunk('sm/mute', async (specifiedMuteState, thunk) => {
-  const { isMuted } = thunk.getState().sm;
+  const { isMuted } = (thunk as any).getState().sm;
   if (scene) {
     // if arg is a boolean use it, otherwise just toggle.
     // sometimes events from button clicks are passed in, so we need to filter for that
@@ -138,12 +142,14 @@ export const disconnect = createAsyncThunk('sm/disconnect', async (args, thunk) 
   }, 500);
 });
 
+// @ts-expect-error TS(2322): Type 'boolean' is not assignable to type 'void'.
 export const createScene = createAsyncThunk('sm/createScene', async (typingOnly = false, thunk) => {
   /* CREATE SCENE */
   if (scene !== null) {
     return console.error('warning! you attempted to create a new scene, when one already exists!');
   }
   // request permissions from user and create instance of Scene and ask for webcam/mic permissions
+  // @ts-expect-error TS(2339): Property 'microphone' does not exist on type 'type... Remove this comment to see the full error message
   const { microphone, microphoneAndCamera, none } = UserMedia;
   try {
     const sceneOpts = {
@@ -152,12 +158,14 @@ export const createScene = createAsyncThunk('sm/createScene', async (typingOnly 
       // change value if your application needs to have an explicit audio-only mode.
       audioOnly: false,
       // requested permissions
+      // @ts-expect-error TS(1345): An expression of type 'void' cannot be tested for ... Remove this comment to see the full error message
       requestedMediaDevices: typingOnly ? none : microphoneAndCamera,
       // if user denies camera and mic permissions, smwebsdk will request mic only for us
       // required permissions
+      // @ts-expect-error TS(1345): An expression of type 'void' cannot be tested for ... Remove this comment to see the full error message
       requiredMediaDevices: typingOnly ? none : microphone,
     };
-    if (AUTH_MODE === 0) sceneOpts.apiKey = API_KEY;
+    if (AUTH_MODE === 0) (sceneOpts as any).apiKey = API_KEY;
     scene = new Scene(sceneOpts);
   } catch (e) {
     console.error(e);
@@ -169,11 +177,12 @@ export const createScene = createAsyncThunk('sm/createScene', async (typingOnly 
   // use the callback while also calling the internal version
   const smwebsdkOnMessage = scene.onMessage.bind(scene);
 
+  // @ts-expect-error TS(2339): Property 'sm' does not exist on type 'unknown'.
   const { sm } = thunk.getState();
   const { autoClearCards } = sm.config;
   scene.conversation.autoClearCards = autoClearCards;
   // handle content cards that come in via content card API
-  scene.conversation.onCardChanged.addListener((activeCards) => {
+  scene.conversation.onCardChanged.addListener((activeCards: any) => {
     thunk.dispatch(actions.setActiveCards({ activeCards }));
     thunk.dispatch(actions.addConversationResult({
       source: 'persona',
@@ -181,7 +190,7 @@ export const createScene = createAsyncThunk('sm/createScene', async (typingOnly 
     }));
   });
 
-  scene.onMessage = (message) => {
+  scene.onMessage = (message: any) => {
     // removing this will break smwebsdk eventing, call smwebsdk's message handler
     smwebsdkOnMessage(message);
     switch (message.name) {
@@ -233,7 +242,9 @@ export const createScene = createAsyncThunk('sm/createScene', async (typingOnly 
             const featureState = featureArgs[1];
             switch (feature) {
               case ('microphone'): {
+                // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
                 if (featureState === 'on') thunk.dispatch(mute(false));
+                // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
                 else if (featureState === 'off') thunk.dispatch(mute(true));
                 else console.error(`state ${featureState} not supported by @feature(microphone)!`);
                 break;
@@ -257,7 +268,7 @@ export const createScene = createAsyncThunk('sm/createScene', async (typingOnly 
           case ('marker'): {
             // custom speech marker handler
             const { arguments: markerArgs } = message.body;
-            markerArgs.forEach((a) => {
+            markerArgs.forEach((a: any) => {
               switch (a) {
                 // "easter egg" speech marker, prints ASCII "summoned meatball" to console
                 case ('triggerMeatball'): {
@@ -409,7 +420,7 @@ export const createScene = createAsyncThunk('sm/createScene', async (typingOnly 
     scene.session().setLogging(false);
 
     // set video dimensions
-    const { videoWidth, videoHeight } = thunk.getState().sm;
+    const { videoWidth, videoHeight } = (thunk as any).getState().sm;
     // calc resolution w/ device pixel ratio
     const deviceWidth = Math.round(videoWidth * window.devicePixelRatio);
     const deviceHeight = Math.round(videoHeight * window.devicePixelRatio);
@@ -421,10 +432,12 @@ export const createScene = createAsyncThunk('sm/createScene', async (typingOnly 
     // we use an external proxy for video streams
     const { userMediaStream: stream } = scene.session();
     // detect if we're running audio-only
+    // @ts-expect-error TS(2367): This condition will always return 'false' since th... Remove this comment to see the full error message
     const videoEnabled = typingOnly === false
       && stream !== undefined
       && stream.getVideoTracks().length > 0;
     if (videoEnabled === false) thunk.dispatch(actions.setCameraState({ cameraOn: false }));
+    // @ts-expect-error TS(2367): This condition will always return 'false' since th... Remove this comment to see the full error message
     if (typingOnly === true) thunk.dispatch(actions.setTypingOnly());
     // pass dispatch before calling setUserMediaStream so proxy can send dimensions to store
     mediaStreamProxy.passDispatch(thunk.dispatch);
@@ -432,6 +445,7 @@ export const createScene = createAsyncThunk('sm/createScene', async (typingOnly 
     mediaStreamProxy.enableToggle(scene);
 
     // fulfill promise, reducer sets state to indicate loading and connection are complete
+    // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
     return thunk.fulfillWithValue();
   } catch (err) {
     return thunk.rejectWithValue(err);
@@ -440,6 +454,7 @@ export const createScene = createAsyncThunk('sm/createScene', async (typingOnly 
 
 // send plain text to the persona.
 // usually used for typed input or UI elems that trigger a certain phrase
+// @ts-expect-error TS(2339): Property 'text' does not exist on type 'void'.
 export const sendTextMessage = createAsyncThunk('sm/sendTextMessage', async ({ text }, thunk) => {
   if (scene && persona) {
     if (ORCHESTRATION_MODE === true) scene.sendUserText(text);
@@ -451,6 +466,7 @@ export const sendTextMessage = createAsyncThunk('sm/sendTextMessage', async ({ t
   } else thunk.rejectWithValue('not connected to persona!');
 });
 
+// @ts-expect-error TS(2339): Property 'payload' does not exist on type 'void'.
 export const sendEvent = createAsyncThunk('sm/sendEvent', async ({ payload, eventName }) => {
   if (scene && persona) {
     persona.conversationSend(eventName, payload || {}, { kind: 'event' });
@@ -503,14 +519,15 @@ const smSlice = createSlice({
       intermediateUserUtterance: payload.text,
       userSpeaking: true,
     }),
+    // @ts-expect-error TS(2322): Type '(state: WritableDraft<{ tosAccepted: boolean... Remove this comment to see the full error message
     addConversationResult: (state, { payload }) => {
       // we record both text and content cards in the transcript
       if (payload.text !== '' || 'card' in payload !== false) {
         const { source } = payload;
         const newEntry = { source, timestamp: new Date().toISOString() };
         // handle entering either text or card into transcript array
-        if ('text' in payload) newEntry.text = payload.text;
-        if ('card' in payload) newEntry.card = payload.card;
+        if ('text' in payload) (newEntry as any).text = payload.text;
+        if ('card' in payload) (newEntry as any).card = payload.card;
         const out = {
           ...state,
           transcript: [...state.transcript, { ...newEntry }],
@@ -577,19 +594,24 @@ const smSlice = createSlice({
     },
   },
   extraReducers: {
-    [createScene.pending]: (state) => ({
+    // @ts-expect-error TS(2464): A computed property name must be of type 'string',... Remove this comment to see the full error message
+    [createScene.pending]: (state: any) => ({
       ...state,
       loading: true,
       disconnected: false,
       error: null,
     }),
-    [createScene.fulfilled]: (state) => ({
+    // @ts-expect-error TS(2464): A computed property name must be of type 'string',... Remove this comment to see the full error message
+    [createScene.fulfilled]: (state: any) => ({
       ...state,
       loading: false,
       connected: true,
       error: null,
     }),
-    [createScene.rejected]: (state, { payload }) => {
+    // @ts-expect-error TS(2464): A computed property name must be of type 'string',... Remove this comment to see the full error message
+    [createScene.rejected]: (state: any, {
+      payload,
+    }: any) => {
       scene.disconnect();
       // if we call this immediately the disconnect call might not complete
       setTimeout(() => {
@@ -618,4 +640,5 @@ export const {
   setTOS,
 } = smSlice.actions;
 
+// @ts-expect-error TS(2303): Circular definition of import alias 'default'.
 export default smSlice.reducer;

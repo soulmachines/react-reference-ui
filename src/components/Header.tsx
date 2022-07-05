@@ -1,7 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import { Link, useLocation } from 'react-router-dom';
 import {
   logo, logoAltText, transparentHeader, headerHeight, logoLink,
@@ -10,9 +11,16 @@ import {
   disconnect,
 } from '../store/sm/index';
 
+type HeaderProps = {
+    className: string;
+    connected: boolean;
+    loading: boolean;
+    dispatchDisconnect: (...args: any[]) => any;
+};
+
 function Header({
   className, connected, loading, dispatchDisconnect,
-}) {
+}: HeaderProps) {
   const { pathname } = useLocation();
   return (
     <div className={`${className}`}>
@@ -40,12 +48,6 @@ function Header({
     </div>
   );
 }
-Header.propTypes = {
-  className: PropTypes.string.isRequired,
-  connected: PropTypes.bool.isRequired,
-  loading: PropTypes.bool.isRequired,
-  dispatchDisconnect: PropTypes.func.isRequired,
-};
 
 const StyledHeader = styled(Header)`
   position: relative;
@@ -72,12 +74,14 @@ const StyledHeader = styled(Header)`
   }
 `;
 
-const mapStateToProps = ({ sm }) => ({
+const mapStateToProps = ({
+  sm,
+}: any) => ({
   connected: sm.connected,
   loading: sm.loading,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch: any) => ({
   dispatchDisconnect: () => dispatch(disconnect()),
 });
 

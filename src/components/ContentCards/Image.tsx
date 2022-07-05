@@ -1,7 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-function Image({ data }) {
+type Props = {
+    data: {
+        url: string;
+        alt: string;
+    };
+};
+
+function Image({ data }: Props) {
   const { url, alt } = data;
   return (
     <div style={{ width: 'auto', maxWidth: '100%' }}>
@@ -9,12 +15,5 @@ function Image({ data }) {
     </div>
   );
 }
-
-Image.propTypes = {
-  data: PropTypes.shape({
-    url: PropTypes.string.isRequired,
-    alt: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 export default Image;

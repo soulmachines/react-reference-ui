@@ -6,7 +6,7 @@ const CameraPosition = {
   LEFT: 0.3333333333,
 };
 
-const linearInterpolate = (min, max, percentage) => (1.0 - percentage) * min + percentage * max;
+const linearInterpolate = (min: any, max: any, percentage: any) => (1.0 - percentage) * min + percentage * max;
 
 /**
  * Calculate the camera orbit/pan for a given video size and horizontal offset
@@ -15,7 +15,7 @@ const linearInterpolate = (min, max, percentage) => (1.0 - percentage) * min + p
  * @param {number} videoHeight element height
  * @param {number} percentage horizontal offset, 0 is hard left and 1 is hard right
  */
-const calculateCameraPosition = (videoWidth, videoHeight, percentage, tiltDeg = 0) => {
+const calculateCameraPosition = (videoWidth: any, videoHeight: any, percentage: any, tiltDeg = 0) => {
   const ratio = videoWidth / videoHeight;
   const angleRange = ratio * CAMERA_FOV;
 

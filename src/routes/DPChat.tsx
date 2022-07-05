@@ -1,7 +1,8 @@
 import React, { createRef, useEffect, useState } from 'react';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import { useHistory } from 'react-router-dom';
 import PersonaVideo from '../components/PersonaVideo';
 import Captions from '../components/Captions';
@@ -17,21 +18,34 @@ import {
 import CameraPreview from '../components/CameraPreview';
 import breakpoints from '../utils/breakpoints';
 
+type OwnDPChatProps = {
+    className: string;
+    dispatchDisconnect: (...args: any[]) => any;
+    connected: boolean;
+    disconnected: boolean;
+    error?: {
+        msg?: string;
+        err?: {
+            [key: string]: string;
+        };
+    };
+    tosAccepted: boolean;
+    cameraOn: boolean;
+};
+
+// @ts-expect-error TS(2565): Property 'defaultProps' is used before being assig... Remove this comment to see the full error message
+type DPChatProps = OwnDPChatProps & typeof DPChat.defaultProps;
+
 function DPChat({
-  className,
-  connected,
-  disconnected,
-  dispatchDisconnect,
-  error,
-  tosAccepted,
-  cameraOn,
-}) {
+  className, connected, disconnected, dispatchDisconnect, error, tosAccepted, cameraOn,
+}: DPChatProps) {
   const overlayRef = createRef();
   const [height, setHeight] = useState('100vh');
   const [largeViewport, setLargeViewport] = useState(false);
   const [startedAt] = useState(Date.now());
 
   const handleResize = () => {
+    // @ts-expect-error TS(2345): Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
     setHeight(window.innerHeight);
     if (window.innerWidth >= breakpoints.md) setLargeViewport(true);
     else setLargeViewport(false);
@@ -43,6 +57,7 @@ function DPChat({
     } else {
       console.log('cleanup function invoked!');
       window.removeEventListener('resize', handleResize);
+      // @ts-expect-error TS(2349): This expression is not callable.
       dispatchDisconnect();
     }
   };
@@ -76,6 +91,7 @@ function DPChat({
 
   return (
     <div className={className}>
+      {/* @ts-expect-error TS(2322): Type 'RefObject<unknown>' is not assignable to typ... Remove this comment to see the full error message */}
       <div className="video-overlay" ref={overlayRef} style={{ height }}>
         <Header />
         {/* top row */}
@@ -128,19 +144,6 @@ function DPChat({
   );
 }
 
-DPChat.propTypes = {
-  className: PropTypes.string.isRequired,
-  dispatchDisconnect: PropTypes.func.isRequired,
-  connected: PropTypes.bool.isRequired,
-  disconnected: PropTypes.bool.isRequired,
-  error: PropTypes.shape({
-    msg: PropTypes.string,
-    err: PropTypes.objectOf(PropTypes.string),
-  }),
-  tosAccepted: PropTypes.bool.isRequired,
-  cameraOn: PropTypes.bool.isRequired,
-};
-
 DPChat.defaultProps = {
   error: null,
 };
@@ -181,7 +184,9 @@ const StyledDPChat = styled(DPChat)`
   }
 `;
 
-const mapStateToProps = ({ sm }) => ({
+const mapStateToProps = ({
+  sm,
+}: any) => ({
   connected: sm.connected,
   disconnected: sm.disconnected,
   loading: sm.loading,
@@ -190,7 +195,7 @@ const mapStateToProps = ({ sm }) => ({
   cameraOn: sm.cameraOn,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch: any) => ({
   dispatchDisconnect: () => dispatch(disconnect()),
 });
 

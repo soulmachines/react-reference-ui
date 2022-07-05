@@ -1,23 +1,33 @@
 import React, { createRef, useEffect, useState } from 'react';
 import YouTube from 'react-youtube';
-import PropTypes from 'prop-types';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import {
   mute, sendTextMessage, setActiveCards, keepAlive,
 } from '../../store/sm/index';
 
+type OwnVideoProps = {
+    data: {
+        videoId: string;
+        autoplay?: string;
+    };
+    className: string;
+    isMuted: boolean;
+    dispatchMute: (...args: any[]) => any;
+    dispatchTextMessage: (...args: any[]) => any;
+    dispatchHideCards: (...args: any[]) => any;
+    inTranscript?: boolean;
+    dispatchKeepAlive: (...args: any[]) => any;
+    activeCards: any[];
+};
+
+// @ts-expect-error TS(2565): Property 'defaultProps' is used before being assig... Remove this comment to see the full error message
+type VideoProps = OwnVideoProps & typeof Video.defaultProps;
+
 function Video({
-  data,
-  className,
-  isMuted,
-  dispatchMute,
-  dispatchTextMessage,
-  dispatchHideCards,
-  inTranscript,
-  dispatchKeepAlive,
-  activeCards,
-}) {
+  data, className, isMuted, dispatchMute, dispatchTextMessage, dispatchHideCards, inTranscript, dispatchKeepAlive, activeCards,
+}: VideoProps) {
   const { videoId, autoplay } = data;
   const containerRef = React.createRef();
   const [YTElem, setYTElem] = useState();
@@ -45,8 +55,8 @@ function Video({
   useEffect(() => {
     if (isLightbox) setFadeOut(false);
     const ytRef = createRef();
-    let ytTarget;
-    const handleKeyboardInput = (e) => {
+    let ytTarget: any;
+    const handleKeyboardInput = (e: any) => {
       // 1 = playing, 2 = paused
       const playerState = ytTarget.getPlayerState();
       switch (e.nativeEvent.data) {
@@ -60,6 +70,7 @@ function Video({
     };
     // use containerRef to size video embed to elem dimensions
     // assume 16:9 aspect ratio for video
+    // @ts-expect-error TS(2339): Property 'clientWidth' does not exist on type 'unk... Remove this comment to see the full error message
     const { clientWidth: width, clientHeight: height } = containerRef.current;
     let computedWidth = width * 0.9;
     let computedHeight = computedWidth / (16 / 9);
@@ -82,12 +93,14 @@ function Video({
           className="visually-hidden"
           aria-label="press space to play or pause video"
           type="text"
+          // @ts-expect-error TS(2322): Type 'RefObject<unknown>' is not assignable to typ... Remove this comment to see the full error message
           ref={ytRef}
           onChange={handleKeyboardInput}
           value=""
         />
         <YouTube
           videoId={videoId}
+          // @ts-expect-error TS(2769): No overload matches this call.
           opts={opts}
           containerClassName="video-container"
           onEnd={endVideo}
@@ -97,18 +110,20 @@ function Video({
           }}
           onReady={(e) => {
             ytTarget = e.target;
-            if (isLightbox) ytRef.current.focus();
+            if (isLightbox) (ytRef as any).current.focus();
           }}
         />
       </div>
     );
 
+    // @ts-expect-error TS(2345): Argument of type 'Element' is not assignable to pa... Remove this comment to see the full error message
     setYTElem(elem);
     if (isLightbox) setWasMuted(isMuted);
     if (!isMuted && isLightbox) {
       dispatchMute(true);
     }
     return () => {
+      // @ts-expect-error TS(2345): Argument of type 'null' is not assignable to param... Remove this comment to see the full error message
       setYTElem(null);
       if (isLightbox) {
         dispatchMute(wasMuted);
@@ -124,10 +139,12 @@ function Video({
   });
 
   if (isLightbox === false) {
+    // @ts-expect-error TS(2322): Type 'RefObject<unknown>' is not assignable to typ... Remove this comment to see the full error message
     return <div ref={containerRef}>{YTElem}</div>;
   }
 
   return (
+    // @ts-expect-error TS(2322): Type 'RefObject<unknown>' is not assignable to typ... Remove this comment to see the full error message
     <div ref={containerRef} className={`${className} ${fadeOut === true ? 'fade' : ''}`} key={videoId}>
       <div>
         <div className="row">
@@ -147,35 +164,23 @@ function Video({
   );
 }
 
-Video.propTypes = {
-  data: PropTypes.shape({
-    videoId: PropTypes.string.isRequired,
-    autoplay: PropTypes.string,
-  }).isRequired,
-  className: PropTypes.string.isRequired,
-  isMuted: PropTypes.bool.isRequired,
-  dispatchMute: PropTypes.func.isRequired,
-  dispatchTextMessage: PropTypes.func.isRequired,
-  dispatchHideCards: PropTypes.func.isRequired,
-  inTranscript: PropTypes.bool,
-  dispatchKeepAlive: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  activeCards: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
-
 Video.defaultProps = {
   inTranscript: false,
 };
 
-const mapStateToProps = ({ sm }) => ({
+const mapStateToProps = ({
+  sm,
+}: any) => ({
   isMuted: sm.isMuted,
   activeCards: sm.activeCards,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  dispatchMute: (muteValue) => dispatch(mute(muteValue)),
+const mapDispatchToProps = (dispatch: any) => ({
+  // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
+  dispatchMute: (muteValue: any) => dispatch(mute(muteValue)),
   dispatchHideCards: () => dispatch(setActiveCards({})),
-  dispatchTextMessage: (text) => dispatch(sendTextMessage({ text })),
+  // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
+  dispatchTextMessage: (text: any) => dispatch(sendTextMessage({ text })),
   dispatchKeepAlive: () => dispatch(keepAlive()),
 });
 

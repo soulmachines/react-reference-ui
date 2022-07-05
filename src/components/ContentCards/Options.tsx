@@ -1,10 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { sendTextMessage } from '../../store/sm/index';
 
-function Options({ data, dispatchTextFromData }) {
+type OptionsProps = {
+    data: {
+        options?: {
+            label?: string;
+            value?: string;
+        }[];
+    };
+    dispatchTextFromData: (...args: any[]) => any;
+};
+
+function Options({ data, dispatchTextFromData }: OptionsProps) {
   const { options } = data;
+  // @ts-expect-error TS(2532): Object is possibly 'undefined'.
   const optionsDisplay = options.map(({ label, value }) => (
     <button type="button" className="btn primary-accent" data-trigger-text={value} onClick={dispatchTextFromData} key={JSON.stringify({ label, value })}>
       {label}
@@ -17,18 +27,9 @@ function Options({ data, dispatchTextFromData }) {
   );
 }
 
-Options.propTypes = {
-  data: PropTypes.shape({
-    options: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.string,
-    })),
-  }).isRequired,
-  dispatchTextFromData: PropTypes.func.isRequired,
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  dispatchTextFromData: (e) => dispatch(sendTextMessage({ text: e.target.dataset.triggerText })),
+const mapDispatchToProps = (dispatch: any) => ({
+  // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
+  dispatchTextFromData: (e: any) => dispatch(sendTextMessage({ text: e.target.dataset.triggerText })),
 });
 
 export default connect(null, mapDispatchToProps)(Options);

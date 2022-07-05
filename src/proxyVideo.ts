@@ -11,6 +11,14 @@ export default proxyVideo;
 const setCameraState = createAction('sm/setCameraState');
 // ### handles webcam stream ###
 class UserMediaStream {
+  dispatch: any;
+
+  scene: any;
+
+  userMediaStream: any;
+
+  videoOff: any;
+
   constructor() {
     this.userMediaStream = null;
     this.videoOff = false;
@@ -20,11 +28,11 @@ class UserMediaStream {
 
   // use dispatch to tell redux state what camera state is
   // should be called before setUserMediaStream so we can tell the store the stream's dimensions
-  passDispatch = (dispatch) => {
+  passDispatch = (dispatch: any) => {
     this.dispatch = dispatch;
   };
 
-  setUserMediaStream = (stream, audioOnly = false) => {
+  setUserMediaStream = (stream: any, audioOnly = false) => {
     this.videoOff = !audioOnly;
     // call passDispatch before this so we have access to store
     if (this.dispatch === null) throw new Error('call passDispatch() before setUserMediaStream()!');
@@ -36,8 +44,10 @@ class UserMediaStream {
       // send webcam stream dimensions to store
       const track = stream.getVideoTracks()[0];
       const { width: cameraWidth, height: cameraHeight } = track.getSettings();
+      // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
       this.dispatch(setCameraState({ cameraOn: true, cameraWidth, cameraHeight }));
     } catch {
+      // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
       this.dispatch(setCameraState({ cameraOn: false }));
     }
   };
@@ -46,7 +56,7 @@ class UserMediaStream {
 
   // NOTE: renders emotional recognition nonfunctional, not recommended for use as of 7/14/21
   // if we toggle video, we need to provide scene w/ the new feed
-  enableToggle = (scene) => {
+  enableToggle = (scene: any) => {
     this.scene = scene;
   };
 
@@ -59,6 +69,7 @@ class UserMediaStream {
       if (videoOff === false) {
         track.stop();
         this.videoOff = true;
+        // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
         this.dispatch(setCameraState({ cameraOn: false }));
       } else {
       // we need to re-request the stream from the webcam after it's been stopped
@@ -72,6 +83,7 @@ class UserMediaStream {
         // ### THIS IS WHERE WE WOULD PROVIDE SCENE W/ THE NEW STREAM ###
         // this.scene.session().userMediaStream = this.userMediaStream;
         this.videoOff = false;
+        // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
         this.dispatch(setCameraState({ cameraOn: true }));
       }
     }

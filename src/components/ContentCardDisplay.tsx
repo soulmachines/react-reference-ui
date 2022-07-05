@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { setActiveCards, animateCamera } from '../store/sm/index';
 import { calculateCameraPosition } from '../utils/camera';
@@ -8,9 +8,19 @@ import Transcript from './ContentCards/Transcript';
 import ContentCardSwitch from './ContentCardSwitch';
 import breakpoints from '../utils/breakpoints';
 
+type ContentCardDisplayProps = {
+    activeCards: any[];
+    dispatchAnimateCamera: (...args: any[]) => any;
+    videoWidth: number;
+    videoHeight: number;
+    showTranscript: boolean;
+    className: string;
+    connected: boolean;
+};
+
 function ContentCardDisplay({
   activeCards, dispatchAnimateCamera, videoWidth, videoHeight, showTranscript, className, connected,
-}) {
+}: ContentCardDisplayProps) {
   if (!activeCards) return null;
   const CardDisplay = activeCards.map((c, index) => (
     <div className="mb-2" key={JSON.stringify(c)}>
@@ -42,17 +52,6 @@ function ContentCardDisplay({
   );
 }
 
-ContentCardDisplay.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  activeCards: PropTypes.arrayOf(PropTypes.object).isRequired,
-  dispatchAnimateCamera: PropTypes.func.isRequired,
-  videoWidth: PropTypes.number.isRequired,
-  videoHeight: PropTypes.number.isRequired,
-  showTranscript: PropTypes.bool.isRequired,
-  className: PropTypes.string.isRequired,
-  connected: PropTypes.bool.isRequired,
-};
-
 const StyledContentCardDisplay = styled(ContentCardDisplay)`
   max-height: 10rem;
   overflow-y: scroll;
@@ -64,7 +63,10 @@ const StyledContentCardDisplay = styled(ContentCardDisplay)`
   }
 
   /* show translucent background if card showing on small device */
-  ${({ activeCards, showTranscript }) => (activeCards.length > 0 || showTranscript === true
+  ${({
+    activeCards,
+    showTranscript,
+  }: any) => (activeCards.length > 0 || showTranscript === true
     ? `background: rgba(255, 255, 255, 0.3);
     outline: 0.5rem solid rgba(255, 255, 255, 0.3);`
     : '')}
@@ -78,7 +80,9 @@ const StyledContentCardDisplay = styled(ContentCardDisplay)`
   width: 100%;
 `;
 
-const mapStateToProps = ({ sm }) => ({
+const mapStateToProps = ({
+  sm,
+}: any) => ({
   activeCards: sm.activeCards,
   videoWidth: sm.videoWidth,
   videoHeight: sm.videoHeight,
@@ -86,13 +90,15 @@ const mapStateToProps = ({ sm }) => ({
   connected: sm.connected,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  dispatchActiveCards: (activeCards) => dispatch(
+const mapDispatchToProps = (dispatch: any) => ({
+  dispatchActiveCards: (activeCards: any) => dispatch(
     // the next time the persona speaks, if the cards are stale, it will clear them.
     // if this value isn't desired, don't set this value to true.
     setActiveCards({ activeCards, cardsAreStale: true }),
   ),
-  dispatchAnimateCamera: (options, duration = 1) => dispatch(animateCamera({ options, duration })),
+
+  // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
+  dispatchAnimateCamera: (options: any, duration = 1) => dispatch(animateCamera({ options, duration })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StyledContentCardDisplay);

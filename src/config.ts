@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+// @ts-expect-error TS(2307): Cannot find module './img/sm-logo-retina.webp' or ... Remove this comment to see the full error message
 import smLogo from './img/sm-logo-retina.webp';
 
 // header will not take up vertical height when transparent, so you need to be mindful of overlap

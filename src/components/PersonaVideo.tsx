@@ -1,15 +1,22 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import React, { createRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import * as actions from '../store/sm';
 import proxyVideo from '../proxyVideo';
 import { headerHeight, transparentHeader } from '../config';
 
+type PersonaVideoProps = {
+    setVideoDimensions: (...args: any[]) => any;
+    loading: boolean;
+    connected: boolean;
+    className: string;
+};
+
 function PersonaVideo({
   loading, connected, setVideoDimensions, className,
-}) {
+}: PersonaVideoProps) {
   // video elem ref used to link proxy video element to displayed video
   const videoRef = createRef();
   // we need the container dimensions to render the right size video in the persona server
@@ -24,8 +31,8 @@ function PersonaVideo({
       // the video should resize with the element size.
       // this needs to be done through the redux store because the Persona server
       // needs to be aware of the video target dimensions to render a propperly sized video
-      const videoWidth = containerRef.current.clientWidth;
-      const videoHeight = containerRef.current.clientHeight;
+      const videoWidth = (containerRef as any).current.clientWidth;
+      const videoHeight = (containerRef as any).current.clientHeight;
       setVideoDimensions(videoWidth, videoHeight);
       // constrain to inner window height so it fits on mobile
       setHeight(`${videoHeight}`);
@@ -39,7 +46,7 @@ function PersonaVideo({
     window.addEventListener('resize', handleResize);
     if (connected) {
       if (!videoDisplayed) {
-        videoRef.current.srcObject = proxyVideo.srcObject;
+        (videoRef as any).current.srcObject = proxyVideo.srcObject;
         setVideoDisplayed(true);
       }
     }
@@ -48,10 +55,12 @@ function PersonaVideo({
   });
 
   return (
+    // @ts-expect-error TS(2322): Type 'RefObject<unknown>' is not assignable to typ... Remove this comment to see the full error message
     <div ref={containerRef} className={className} style={{ height }}>
       {
         connected
           ? (
+            // @ts-expect-error TS(2322): Type 'RefObject<unknown>' is not assignable to typ... Remove this comment to see the full error message
             <video ref={videoRef} autoPlay playsInline className="persona-video" id="personavideo" data-sm-video />
           )
           : null
@@ -72,13 +81,6 @@ function PersonaVideo({
   );
 }
 
-PersonaVideo.propTypes = {
-  setVideoDimensions: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
-  connected: PropTypes.bool.isRequired,
-  className: PropTypes.string.isRequired,
-};
-
 const StyledPersonaVideo = styled(PersonaVideo)`
   /* if you need the persona video to be different than the window dimensions, change these values */
   width: 100vw;
@@ -97,15 +99,15 @@ const StyledPersonaVideo = styled(PersonaVideo)`
   }
 `;
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   loading: state.sm.loading,
   connected: state.sm.connected,
   width: state.sm.videoWidth,
   height: state.sm.videoHeight,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  setVideoDimensions: (videoWidth, videoHeight) => dispatch(
+const mapDispatchToProps = (dispatch: any) => ({
+  setVideoDimensions: (videoWidth: any, videoHeight: any) => dispatch(
     actions.setVideoDimensions({ videoWidth, videoHeight }),
   ),
 });

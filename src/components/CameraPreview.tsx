@@ -1,18 +1,24 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 // import { CameraVideoOff } from 'react-bootstrap-icons';
 import { mediaStreamProxy } from '../proxyVideo';
 
-function CameraPreview({ connected, className, cameraOn }) {
+type CameraPreviewProps = {
+    connected: boolean;
+    className: string;
+    cameraOn: boolean;
+};
+
+function CameraPreview({ connected, className, cameraOn }: CameraPreviewProps) {
   const videoRef = React.createRef();
   const stream = mediaStreamProxy.getUserMediaStream();
 
   useEffect(() => {
     if (stream !== null && mediaStreamProxy.videoOff === false) {
       // display webcam preview in video elem
-      videoRef.current.srcObject = stream;
+      (videoRef as any).current.srcObject = stream;
     }
   }, [connected]);
 
@@ -26,10 +32,12 @@ function CameraPreview({ connected, className, cameraOn }) {
       {/* <button onClick={mediaStreamProxy.toggleVideo} type="button" className="video-button"> */}
       <div className="video-button">
         <video
+          // @ts-expect-error TS(2322): Type 'RefObject<unknown>' is not assignable to typ... Remove this comment to see the full error message
           ref={videoRef}
           muted
           autoPlay
           playsInline
+          // @ts-expect-error TS(2322): Type 'string | null' is not assignable to type 'st... Remove this comment to see the full error message
           className={cameraOn ? null : 'd-none'}
         />
         {/* { cameraOn ? null : <CameraVideoOff /> } */}
@@ -39,16 +47,14 @@ function CameraPreview({ connected, className, cameraOn }) {
   );
 }
 
-CameraPreview.propTypes = {
-  connected: PropTypes.bool.isRequired,
-  className: PropTypes.string.isRequired,
-  cameraOn: PropTypes.bool.isRequired,
-};
-
 const StyledCameraPreview = styled(CameraPreview)`
-  display: ${({ connected }) => (connected ? '' : 'none')};
+  display: ${({
+    connected,
+  }: any) => (connected ? '' : 'none')};
   align-items: center;
-  height: ${({ size }) => size || 4}rem;
+  height: ${({
+    size,
+  }: any) => size || 4}rem;
 
   .video-button {
     display: flex;
@@ -56,24 +62,38 @@ const StyledCameraPreview = styled(CameraPreview)`
     align-items: center;
 
     padding: 0;
-    height: ${({ size }) => size || 4}rem;
-    aspect-ratio: ${({ cameraWidth, cameraHeight }) => cameraWidth / cameraHeight};
+    height: ${({
+    size,
+  }: any) => size || 4}rem;
+    aspect-ratio: ${({
+    cameraWidth,
+    cameraHeight,
+  }: any) => cameraWidth / cameraHeight};
 
     border-radius: 3px;
     background: rgba(0,0,0,0.2);
-    border: ${({ cameraOn }) => (cameraOn ? 'none' : '1px solid gray')};
+    border: ${({
+    cameraOn,
+  }: any) => (cameraOn ? 'none' : '1px solid gray')};
   }
 
   video {
-    height: ${({ size }) => size || 4}rem;
+    height: ${({
+    size,
+  }: any) => size || 4}rem;
     transform: rotateY(180deg);
-    aspect-ratio: ${({ cameraWidth, cameraHeight }) => cameraWidth / cameraHeight};
+    aspect-ratio: ${({
+    cameraWidth,
+    cameraHeight,
+  }: any) => cameraWidth / cameraHeight};
     border-radius: 3px;
     z-index: 20;
   }
 `;
 
-const mapStateToProps = ({ sm }) => ({
+const mapStateToProps = ({
+  sm,
+}: any) => ({
   connected: sm.connected,
   cameraOn: sm.cameraOn,
   cameraWidth: sm.cameraWidth,

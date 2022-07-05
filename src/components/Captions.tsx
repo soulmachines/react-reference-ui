@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { syllable } from 'syllable';
+
+type CaptionsProps = {
+    speechState: string;
+    lastPersonaUtterance: string;
+    className: string;
+    connected: boolean;
+};
 
 function Captions({
   speechState, lastPersonaUtterance, className, connected,
-}) {
+}: CaptionsProps) {
   const [showCaptions, setShowCaptions] = useState(false);
   // if we have a very long response, we need to cycle the displayed content
   const [captionText, setCaptionText] = useState('');
@@ -29,6 +36,7 @@ function Captions({
         const syllableCount = syllable(s);
 
         const regex = /[^\w ]/gm;
+        // @ts-expect-error TS(2802): Type 'IterableIterator<RegExpMatchArray>' can only... Remove this comment to see the full error message
         const punctCount = [...s.matchAll(regex)].length;
 
         const durationEstimate = (syllableCount * millisPerSyllable)
@@ -39,7 +47,7 @@ function Captions({
       });
 
       // recursively cycle through sentences on very long captions
-      const displayCaption = (i) => {
+      const displayCaption = (i: any) => {
         const { text, durationEstimate } = sentencesWithDurationEstimate[i];
         setCaptionText(text);
         if (sentencesWithDurationEstimate[i + 1]) {
@@ -49,12 +57,14 @@ function Captions({
       displayCaption(0);
 
       // record when we put captions on the screen
+      // @ts-expect-error TS(2345): Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
       setCaptionStartTimestamp(Date.now());
       // clear any previous timeout from previous captions.
       // this won't make the captions disappear, since we're overwriting the content
       clearTimeout(captionTimeout);
     } else {
       // when the utterance ends:
+      // @ts-expect-error TS(2532): Object is possibly 'undefined'.
       const captionsDisplayedFor = Date.now() - captionStartTimestamp;
       // check to see if the captions have been displayed for the min. amount of time
       if (captionsDisplayedFor > minCaptionDuration) setShowCaptions(false);
@@ -63,6 +73,7 @@ function Captions({
         const newCaptionTimeout = setTimeout(() => {
           setShowCaptions(false);
         }, minCaptionDuration - captionsDisplayedFor);
+        // @ts-expect-error TS(2345): Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
         setCaptionsTimeout(newCaptionTimeout);
       }
       // sometimes we get blank input, hide that when it happens
@@ -78,13 +89,6 @@ function Captions({
     </div>
   );
 }
-
-Captions.propTypes = {
-  speechState: PropTypes.string.isRequired,
-  lastPersonaUtterance: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired,
-  connected: PropTypes.bool.isRequired,
-};
 
 const StyledCaptions = styled(Captions)`
   display: inline-block;
@@ -114,7 +118,7 @@ const StyledCaptions = styled(Captions)`
 
 `;
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   speechState: state.sm.speechState,
   lastPersonaUtterance: state.sm.lastPersonaUtterance,
   connected: state.sm.connected,

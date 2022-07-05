@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import { headerHeight } from '../config';
 
-function Feedback({ className }) {
+type Props = {
+    className: string;
+};
+
+function Feedback({ className }: Props) {
   const [display, setDisplay] = useState(null);
   return (
     <div className={className}>
@@ -18,6 +23,7 @@ function Feedback({ className }) {
             </div>
             <div className="row">
               <div className="col-auto">
+                {/* @ts-expect-error TS(2345): Argument of type '"👍"' is not assignable to param... Remove this comment to see the full error message */}
                 <button className="btn btn-success" type="button" onClick={() => setDisplay('👍')}>
                   Good
                 </button>
@@ -26,6 +32,7 @@ function Feedback({ className }) {
                 <h1 className="text-center">{display}</h1>
               </div>
               <div className="col-auto">
+                {/* @ts-expect-error TS(2345): Argument of type '"👎"' is not assignable to param... Remove this comment to see the full error message */}
                 <button className="btn btn-danger" type="button" onClick={() => setDisplay('👎')}>
                   Bad
                 </button>
@@ -42,10 +49,6 @@ function Feedback({ className }) {
     </div>
   );
 }
-
-Feedback.propTypes = {
-  className: PropTypes.string.isRequired,
-};
 export default styled(Feedback)`
   .feedback-container {
     height: calc(100vh - ${headerHeight});

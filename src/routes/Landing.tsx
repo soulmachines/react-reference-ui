@@ -1,6 +1,6 @@
 import React from 'react';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import {
   ArrowRightCircleFill,
   CameraVideo,
@@ -8,6 +8,7 @@ import {
   GraphUp,
   FileEarmarkMedical,
 } from 'react-bootstrap-icons';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
@@ -15,7 +16,12 @@ import { headerHeight, landingBackgroundImage, landingBackgroundColor } from '..
 import { setTOS } from '../store/sm/index';
 import eula from '../eula';
 
-function Landing({ className, dispatchAcceptTOS }) {
+type LandingProps = {
+    className: string;
+    dispatchAcceptTOS: (...args: any[]) => any;
+};
+
+function Landing({ className, dispatchAcceptTOS }: LandingProps) {
   return (
     <div className={className}>
       <div className="landing-wrapper">
@@ -37,6 +43,7 @@ function Landing({ className, dispatchAcceptTOS }) {
                   <a href="https://www.soulmachines.com/privacy-policy/" target="_blank" rel="noreferrer">Privacy Policy</a>
                 </div>
                 {/* EULA modal */}
+                {/* @ts-expect-error TS(2322): Type 'string' is not assignable to type 'number'. */}
                 <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div className="modal-dialog modal-xl">
                     <div className="modal-content">
@@ -53,6 +60,7 @@ function Landing({ className, dispatchAcceptTOS }) {
                 <div className="mx-4">
                   <FileEarmarkMedical />
                   {' '}
+                  {/* @ts-expect-error TS(2322): Type '{ children: string; type: "button"; classNam... Remove this comment to see the full error message */}
                   <button type="button" className="link-primary link-button" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     EULA
                   </button>
@@ -98,11 +106,6 @@ function Landing({ className, dispatchAcceptTOS }) {
   );
 }
 
-Landing.propTypes = {
-  className: PropTypes.string.isRequired,
-  dispatchAcceptTOS: PropTypes.func.isRequired,
-};
-
 const StyledLanding = styled(Landing)`
   .link-button {
     background: none;
@@ -134,8 +137,8 @@ const StyledLanding = styled(Landing)`
     }
   }
 `;
-const mapDispatchToProps = (dispatch) => ({
-  dispatchAcceptTOS: (accepted) => dispatch(setTOS({ accepted })),
+const mapDispatchToProps = (dispatch: any) => ({
+  dispatchAcceptTOS: (accepted: any) => dispatch(setTOS({ accepted })),
 });
 
 export default connect(null, mapDispatchToProps)(StyledLanding);

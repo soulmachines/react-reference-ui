@@ -1,7 +1,8 @@
 import React, { createRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import { Link, useHistory, useLocation } from 'react-router-dom';
+// @ts-expect-error TS(7016): Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import {
   ArrowRightCircleFill, CameraVideo, CameraVideoFill, LightningCharge, MicFill, Soundwave,
@@ -12,9 +13,26 @@ import Header from '../components/Header';
 import { headerHeight, landingBackgroundImage, landingBackgroundColor } from '../config';
 import breakpoints from '../utils/breakpoints';
 
+type OwnLoadingProps = {
+    className: string;
+    connected: boolean;
+    loading: boolean;
+    dispatchCreateScene: (...args: any[]) => any;
+    error?: {
+        msg?: string;
+        err?: {
+            [key: string]: string;
+        };
+    };
+    tosAccepted: boolean;
+};
+
+// @ts-expect-error TS(2565): Property 'defaultProps' is used before being assig... Remove this comment to see the full error message
+type LoadingProps = OwnLoadingProps & typeof Loading.defaultProps;
+
 function Loading({
   className, connected, loading, dispatchCreateScene, error, tosAccepted,
-}) {
+}: LoadingProps) {
   // pull querystring to see if we are displaying an error
   // (app can redirect to /loading on fatal err)
   const useQuery = () => new URLSearchParams(useLocation().search);
@@ -26,11 +44,13 @@ function Loading({
   // create persona scene on button press on on mount, depending on device size
   const createSceneIfNotStarted = () => {
     if (loading === false && connected === false && error === null) {
+      // @ts-expect-error TS(2349): This expression is not callable.
       dispatchCreateScene();
     }
   };
   const createSceneAndIteratePage = () => {
     // if we encounter a fatal error, app redirects to /loading to display
+    // @ts-expect-error TS(2367): This condition will always return 'true' since the... Remove this comment to see the full error message
     if (!connected && !loading && query.get('error') !== true) createSceneIfNotStarted();
     setDisplayedPage(displayedPage + 1);
   };
@@ -163,6 +183,7 @@ function Loading({
   const [height, setHeight] = useState('100vh');
 
   const handleResize = () => {
+    // @ts-expect-error TS(2345): Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
     setHeight(window.innerHeight);
   };
 
@@ -174,12 +195,12 @@ function Loading({
   }, []);
 
   return (
+    // @ts-expect-error TS(2322): Type 'RefObject<unknown>' is not assignable to typ... Remove this comment to see the full error message
     <div className={className} ref={overlayRef} style={{ minHeight: height }}>
       <Header />
       <div className="container">
         <div className="loading-wrapper">
-          {
-          !error
+          {!error
             ? (
               <div>
                 <div className="m-1">
@@ -196,7 +217,7 @@ function Loading({
                   </div>
                   <div className="row">
                     <div className="col d-flex justify-content-center m-3">
-                      { proceedButton }
+                      {proceedButton}
                     </div>
                   </div>
                 </div>
@@ -206,9 +227,10 @@ function Loading({
                       if (i !== displayedPage) return null;
                       return (
                         <motion.div
-                        // using indexes as keys is fine since the pages are pre-defined and static
-                        // eslint-disable-next-line react/no-array-index-key
+                // using indexes as keys is fine since the pages are pre-defined and static
+                // eslint-disable-next-line react/no-array-index-key
                           key={i}
+                          // @ts-expect-error TS(2322): Type '{ enter: { x: number; opacity: number; }; ce... Remove this comment to see the full error message
                           variants={variants}
                           initial="enter"
                           animate="center"
@@ -229,67 +251,55 @@ function Loading({
             : (
               <div className="alert alert-danger col-md-6 offset-md-3">
                 {
-                  // special error for webcam and mic denied permissions
-                  error.msg === 'permissionsDenied'
-                    ? (
-                      <div>
-                        <h4>
-                          <CameraVideoFill />
-                          {' / '}
-                          <MicFill />
-                          {' '}
-                          Permissions Denied
-                        </h4>
-                        <hr />
-                        <p>
-                          Looks like you’ve denied us access to your camera and microphone.
-                          If you&apos;d prefer, you can only enable the microphone.
-                          You can always change permissions in your browser settings and try again.
-                        </p>
-                        <div className="d-grid mb-3">
-                          <button onClick={() => history.go(0)} type="button" className="btn btn-primary">Reload</button>
-                        </div>
-                        <p>
-                          We can have the best conversation when I can see and hear you.
-                          However, if you prefer, you can also interact with me by typing only.
-                        </p>
-                        <div className="d-grid">
-                          <button type="button" className="btn btn-outline-primary" onClick={() => dispatchCreateScene(true)}>
-                            I prefer to type
-                          </button>
-                        </div>
-                      </div>
-                    )
-                    : (
-                      <div>
-                        <h4>Encountered fatal error!</h4>
-                        <hr />
-                        <pre>
-                          {JSON.stringify(error, null, '  ')}
-                        </pre>
-                      </div>
-                    )
-                }
+            // special error for webcam and mic denied permissions
+            (error as any).msg === 'permissionsDenied'
+              ? (
+                <div>
+                  <h4>
+                    <CameraVideoFill />
+                    {' / '}
+                    <MicFill />
+                    {' '}
+                    Permissions Denied
+                  </h4>
+                  <hr />
+                  <p>
+                    Looks like you’ve denied us access to your camera and microphone.
+                    If you&apos;d prefer, you can only enable the microphone.
+                    You can always change permissions in your browser settings and try again.
+                  </p>
+                  <div className="d-grid mb-3">
+                    <button onClick={() => history.go(0)} type="button" className="btn btn-primary">Reload</button>
+                  </div>
+                  <p>
+                    We can have the best conversation when I can see and hear you.
+                    However, if you prefer, you can also interact with me by typing only.
+                  </p>
+                  <div className="d-grid">
+                    {/* @ts-expect-error TS(2349): This expression is not callable. */}
+                    <button type="button" className="btn btn-outline-primary" onClick={() => dispatchCreateScene(true)}>
+                      I prefer to type
+                    </button>
+                  </div>
+                </div>
+              )
+              : (
+                <div>
+                  <h4>Encountered fatal error!</h4>
+                  <hr />
+                  <pre>
+                    {JSON.stringify(error, null, '  ')}
+                  </pre>
+                </div>
+              )
+}
               </div>
-            )
-        }
+            )}
         </div>
       </div>
     </div>
   );
 }
-
-Loading.propTypes = {
-  className: PropTypes.string.isRequired,
-  connected: PropTypes.bool.isRequired,
-  loading: PropTypes.bool.isRequired,
-  dispatchCreateScene: PropTypes.func.isRequired,
-  error: PropTypes.shape({
-    msg: PropTypes.string,
-    err: PropTypes.objectOf(PropTypes.string),
-  }),
-  tosAccepted: PropTypes.bool.isRequired,
-};
 
 Loading.defaultProps = {
   error: null,
@@ -330,14 +340,17 @@ const StyledLoading = styled(Loading)`
   }
 `;
 
-const mapStateToProps = ({ sm }) => ({
+const mapStateToProps = ({
+  sm,
+}: any) => ({
   connected: sm.connected,
   loading: sm.loading,
   error: sm.error,
   tosAccepted: sm.tosAccepted,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch: any) => ({
+  // @ts-expect-error TS(2554): Expected 0 arguments, but got 1.
   dispatchCreateScene: (typingOnly = false) => dispatch(createScene(typingOnly)),
 });
 
